@@ -1,0 +1,270 @@
+[
+  {
+    "id": "qx50-2014",
+    "createdAt": "2026-10-29T12:00:00.000Z",
+    "drive": "",
+    "engine": "3.7L V6 (VQ37VHR)",
+    "fsmFolder": "QX50/2014",
+    "lookedUpAt": "2026-10-29T12:00:00.000Z",
+    "make": "Infiniti",
+    "model": "QX50",
+    "parts": {
+      "brakeFluid": {
+        "value": "Nissan heavy-duty brake fluid or DOT 3",
+        "page": "OM 9-3",
+        "verified": true
+      },
+      "coolant": {
+        "value": "Nissan Long Life Coolant/Antifreeze, pre-diluted; 9-1/2 US qt (9.0 L) with reservoir",
+        "page": "OM 9-2",
+        "verified": true
+      },
+      "drainWasher": {
+        "value": "Nissan 11026-01M02",
+        "verified": false
+      },
+      "engineOil": {
+        "value": "SAE 5W-30, API certified (Nissan Ester Oil recommended)",
+        "page": "OM 9-2",
+        "verified": true
+      },
+      "oilCapacity": {
+        "value": "5-1/8 US qt (4.9 L) with filter; 4-7/8 US qt (4.6 L) without",
+        "page": "OM 9-2",
+        "verified": true
+      },
+      "oilFilter": {
+        "value": "Nissan 15208-65F0E",
+        "verified": false
+      },
+      "sparkPlug": {
+        "value": "FXE24HR-11, gap 1.1 mm (0.043 in)",
+        "page": "OM 9-9",
+        "verified": true
+      },
+      "tirePressure": {
+        "value": "See the driver's door jamb placard",
+        "verified": false
+      },
+      "transFluid": {
+        "value": "Nissan Matic S ATF (AWD transfer case: Nissan Matic J ATF)",
+        "page": "OM 9-2",
+        "verified": true
+      },
+      "wheelFastener": {
+        "value": "M12×1.25 lug nuts, 21 mm socket",
+        "verified": false
+      }
+    },
+    "specs": [
+      {
+        "angle": null,
+        "atlas": "lug",
+        "fastener": "M12×1.25 nut, 21 mm",
+        "id": "qx-lug",
+        "job": "wheels",
+        "name": "Wheel lug nuts",
+        "nm": 108,
+        "notes": "Owner's manual: 108 N·m (80 ft-lb). Tighten in the order shown in the manual with the car lowered. No oil or grease on studs or nuts. Re-torque after the first 1,000 km (600 mi).",
+        "page": "OM 6-8",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "bracket",
+        "fastener": "2 bolts, caliper to steering knuckle",
+        "id": "qx-fbrk",
+        "job": "wheels",
+        "name": "Front caliper mounting (torque member) bolts",
+        "nm": 123,
+        "notes": "From the 2014 QX50 factory service manual, BR-37. 2-piston sliding caliper.",
+        "page": "BR-37",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "pin",
+        "fastener": "2 bolts, cylinder body to torque member",
+        "id": "qx-fpin",
+        "job": "wheels",
+        "name": "Front caliper body (sliding pin) bolts",
+        "nm": 26.5,
+        "notes": "From the 2014 QX50 factory service manual, BR-35. Grease the sliding pins with rubber grease, not the bolt threads.",
+        "page": "BR-35",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "bracket",
+        "fastener": "2 bolts with washers",
+        "id": "qx-rbrk",
+        "job": "wheels",
+        "name": "Rear caliper mounting bolts",
+        "nm": 84.3,
+        "notes": "From the 2014 QX50 factory service manual, BR-43.",
+        "page": "BR-43",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "pin",
+        "fastener": "2 pin bolts",
+        "id": "qx-rpin",
+        "job": "wheels",
+        "name": "Rear caliper sliding pin bolts",
+        "nm": 43.15,
+        "notes": "From the 2014 QX50 factory service manual, BR-41 and BR-43. Grease the pin shank.",
+        "page": "BR-41",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "bleeder",
+        "fastener": "Bleeder on front caliper",
+        "id": "qx-bleed",
+        "job": "wheels",
+        "name": "Front bleeder valve",
+        "nm": 7.8,
+        "notes": "From the 2014 QX50 factory service manual, BR-37. 69 in-lb. Snug only.",
+        "page": "BR-37",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "bleeder",
+        "fastener": "Bleeder on rear caliper",
+        "id": "qx-rbleed",
+        "job": "wheels",
+        "name": "Rear bleeder valve",
+        "nm": 8.3,
+        "notes": "From the 2014 QX50 factory service manual, BR-43. 73 in-lb. Snug only.",
+        "page": "BR-43",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "banjo",
+        "fastener": "Union bolt at caliper",
+        "id": "qx-union",
+        "job": "wheels",
+        "name": "Brake hose union (banjo) bolts, front and rear",
+        "nm": 18.2,
+        "notes": "From the 2014 QX50 factory service manual, BR-20 and BR-23. Use new copper washers every time.",
+        "page": "BR-20",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": null,
+        "fastener": "Flare nut wrench",
+        "id": "qx-flare",
+        "job": "wheels",
+        "name": "Brake tube flare nuts",
+        "nm": 16.2,
+        "notes": "From the 2014 QX50 factory service manual, BR-20 and BR-23. Don't scratch the flare nut or the tube.",
+        "page": "BR-20",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "axle",
+        "fastener": "Large hex, staked",
+        "id": "qx-axle",
+        "job": "wheels",
+        "name": "Wheel hub lock nut (drive shaft nut)",
+        "nm": null,
+        "notes": "No confident value. Front nut only on AWD; rear on all. Single-use staked nut, replace it.",
+        "page": null,
+        "verified": false
+      },
+      {
+        "angle": null,
+        "atlas": "tierod",
+        "fastener": null,
+        "id": "qx-tierod",
+        "job": "wheels",
+        "name": "Outer tie rod end nut",
+        "nm": null,
+        "notes": "No confident value. Check the ST section of the service manual.",
+        "page": null,
+        "verified": false
+      },
+      {
+        "angle": null,
+        "atlas": "drain",
+        "fastener": "Drain plug with new washer",
+        "id": "qx-drain",
+        "job": "oil",
+        "name": "Oil pan drain plug",
+        "nm": 34,
+        "notes": "Owner's manual range 29–39 N·m (22–29 ft-lb); 34 N·m is mid-range. Always use a new washer. Don't overtighten.",
+        "page": "OM 8-13",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "filter",
+        "fastener": "Spin-on filter",
+        "id": "qx-filter",
+        "job": "oil",
+        "name": "Spin-on oil filter",
+        "nm": 17.6,
+        "notes": "Owner's manual: turn until you feel light resistance, then 2/3 turn more. Torque range 14.7–20.5 N·m (11–15 ft-lb). Oil the new gasket first.",
+        "page": "OM 8-13",
+        "verified": true
+      },
+      {
+        "angle": null,
+        "atlas": "plug",
+        "fastener": "14 mm thin-wall plug socket",
+        "id": "qx-plug",
+        "job": "ignition",
+        "name": "Spark plugs",
+        "nm": 24.5,
+        "notes": "Plug type FXE24HR-11, gap 1.1 mm (owner's manual 9-9). Torque is in the EM section, not the owner's manual. Cold engine only; the rear bank needs the intake plenum removed.",
+        "page": null,
+        "verified": false
+      },
+      {
+        "angle": null,
+        "atlas": "coil",
+        "fastener": "10 mm",
+        "id": "qx-coil",
+        "job": "ignition",
+        "name": "Ignition coil bolts",
+        "nm": null,
+        "notes": "No confident value. Low torque into plastic; snug only.",
+        "page": null,
+        "verified": false
+      },
+      {
+        "angle": null,
+        "atlas": "transPlug",
+        "fastener": null,
+        "id": "qx-trans",
+        "job": "drivetrain",
+        "name": "Transmission drain plug (RE7R01A)",
+        "nm": null,
+        "notes": "No confident value. Refill and level check need fluid temperature 35–45 °C through the check plug. Use the manual or a shop.",
+        "page": null,
+        "verified": false
+      },
+      {
+        "angle": null,
+        "atlas": "diffPlug",
+        "fastener": null,
+        "id": "qx-diff",
+        "job": "drivetrain",
+        "name": "Rear differential drain / filler plugs",
+        "nm": null,
+        "notes": "Plug torque not in the owner's manual; check the DLN section. Oil: Nissan Super GL-5 80W-90 hypoid, or API GL-5 SAE 80W-90 (owner's manual 9-2).",
+        "page": null,
+        "verified": false
+      }
+    ],
+    "trim": "",
+    "vin": "",
+    "year": "2014",
+    "note": "Verified from the 2014 QX50 factory service manual (BR) and owner's manual (OM)."
+  }
+]

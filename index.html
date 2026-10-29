@@ -1,0 +1,1784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1D5BB8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DIYgnose">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>DIYgnose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: garage app — sticky app bar with car switcher and view tabs; specs bench (diagram + list), DIY guides, parts & fluids. */
+:root {
+  --bg: #EDF0F2; --surface: #FFFFFF; --sunk: #F5F7F8; --ink: #15202A; --ink-2: #4E5C69; --line: #D2D9DF;
+  --accent: #1D5BB8; --accent-ink: #FFFFFF; --accent-soft: #E3ECF8;
+  --ok: #1E7A4C; --ok-bg: #E2F3EA;
+  --paint: #F2C200; --paint-ink: #3D3000;
+  --warn: #9A4F06; --warn-bg: #FBEEDA; --bad: #B3261E;
+  --metal: #CDD3D9; --metal-2: #B1BAC2; --metal-3: #86929C; --metal-line: #6B7782; --caliper: #B8322A;
+  --hi: #FBFCFD; --shade: #5E6870; --iron: #7D7873; --iron-hi: #A8A39D; --rubber: #24282C; --rubber-hi: #4E555B;
+  --caliper-hi: #E25D52; --caliper-dk: #7E1C16; --ceramic: #F7F5F0; --ceramic-sh: #C4BFB5; --filter: #2E5EA6; --filter-dk: #142F57; --brass: #C08F3A;
+  --f-display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --r: 12px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F151B; --surface: #172029; --sunk: #121A21; --ink: #E5EBF0; --ink-2: #9AA8B4; --line: #2A3641;
+  --accent: #74A6F2; --accent-ink: #0B1520; --accent-soft: #1C2D44;
+  --ok: #5CC98F; --ok-bg: #143323;
+  --paint: #F2C200; --paint-ink: #2A2100;
+  --warn: #F1A95B; --warn-bg: #36260F; --bad: #F2867E;
+  --metal: #3A4652; --metal-2: #4B5865; --metal-3: #66737F; --metal-line: #8C99A4; --caliper: #C9463D;
+  --hi: #AEB9C3; --shade: #1A222A; --iron: #4A4541; --iron-hi: #6E6862; --rubber: #0C0E10; --rubber-hi: #343A40;
+  --caliper-hi: #E66E63; --caliper-dk: #6A1814; --ceramic: #DCD8D0; --ceramic-sh: #8E8981; --filter: #3B6DB8; --filter-dk: #16305A; --brass: #B08636;
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #0F151B; --surface: #172029; --sunk: #121A21; --ink: #E5EBF0; --ink-2: #9AA8B4; --line: #2A3641;
+  --accent: #74A6F2; --accent-ink: #0B1520; --accent-soft: #1C2D44;
+  --ok: #5CC98F; --ok-bg: #143323;
+  --paint: #F2C200; --paint-ink: #2A2100;
+  --warn: #F1A95B; --warn-bg: #36260F; --bad: #F2867E;
+  --metal: #3A4652; --metal-2: #4B5865; --metal-3: #66737F; --metal-line: #8C99A4; --caliper: #C9463D;
+  --hi: #AEB9C3; --shade: #1A222A; --iron: #4A4541; --iron-hi: #6E6862; --rubber: #0C0E10; --rubber-hi: #343A40;
+  --caliper-hi: #E66E63; --caliper-dk: #6A1814; --ceramic: #DCD8D0; --ceramic-sh: #8E8981; --filter: #3B6DB8; --filter-dk: #16305A; --brass: #B08636;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: .01em; margin: 0; text-wrap: balance; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.label { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
+.muted { color: var(--ink-2); }
+.inner { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* app bar */
+.appbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.appbar .inner { display: flex; align-items: center; gap: 10px 14px; padding-block: 10px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 8px; margin-right: auto; }
+.logo svg { width: 30px; height: 30px; flex: none; }
+.logo b { font-family: var(--f-display); font-size: 26px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
+.logo b span { color: var(--accent); }
+.carbtn { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--sunk); border-radius: 999px; padding: 6px 8px 6px 14px; max-width: 100%; min-width: 0; }
+.carbtn b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.carbtn svg { width: 18px; height: 18px; flex: none; color: var(--ink-2); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; background: var(--sunk); padding: 3px; flex: none; }
+.seg button { border: 0; background: none; padding: 4px 12px; border-radius: 999px; font-family: var(--f-mono); font-size: 13px; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.views { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.views button { flex: none; border: 0; background: none; padding: 10px 14px 11px; font-family: var(--f-display); font-size: 19px; font-weight: 600; color: var(--ink-2); border-bottom: 3px solid transparent; }
+.views button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+main { padding-block: 18px 56px; display: grid; gap: 16px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 9px; padding: 8px 14px; font-weight: 500; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-2); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.danger { color: var(--bad); }
+.btn.danger.armed { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+.btn.small { padding: 5px 10px; font-size: 13px; }
+.btn.big { padding: 12px 18px; font-size: 16px; font-weight: 600; }
+.btn[disabled] { opacity: .55; cursor: default; }
+.btn svg { width: 18px; height: 18px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.spin { width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; flex: none; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } }
+.msg { font-size: 13.5px; padding: 9px 12px; border-radius: 9px; background: var(--sunk); border: 1px solid var(--line); display: flex; gap: 8px; align-items: center; }
+.msg.err { color: var(--bad); }
+
+/* car summary */
+.car { padding: 18px; display: grid; gap: 14px; }
+.car-top { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: flex-start; justify-content: space-between; }
+.car h1 { font-size: 34px; line-height: 1.05; }
+.car .sub { color: var(--ink-2); font-size: 14px; }
+.meter { display: grid; gap: 6px; min-width: 220px; flex: 1 1 260px; max-width: 420px; }
+.meter .bar { height: 10px; border-radius: 99px; background: var(--warn-bg); overflow: hidden; border: 1px solid var(--line); }
+.meter .bar i { display: block; height: 100%; background: var(--ok); }
+.meter .txt { font-size: 13.5px; }
+.manual { border-top: 1px dashed var(--line); padding-top: 12px; display: grid; gap: 8px; font-size: 14px; }
+.manual p { margin: 0; max-width: 75ch; }
+.links { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 14px; }
+.links a { color: var(--accent); font-weight: 500; overflow-wrap: anywhere; }
+.ask { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ask input { flex: 1 1 220px; min-width: 0; border: 1px solid var(--line); border-radius: 9px; background: var(--sunk); padding: 8px 11px; }
+
+/* job tabs + bench */
+.tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
+.tab { flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 14px; color: var(--ink-2); }
+.tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.tab .n { font-family: var(--f-mono); font-size: 12px; opacity: .75; margin-left: 4px; }
+.bench { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px; align-items: start; }
+@media (max-width: 860px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+.diagram { margin: 0; padding: 14px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 120px); }
+@media (max-width: 860px) { .diagram { position: static; } }
+.diagram svg { width: 100%; height: auto; display: block; }
+.diagram figcaption { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; }
+.badge-g { cursor: pointer; }
+.badge-g circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.badge-g text { font-family: var(--f-mono); font-size: 12px; font-weight: 600; fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.badge-g.on circle { fill: var(--accent); stroke: var(--accent); }
+.badge-g.on text { fill: var(--accent-ink); }
+.leader { stroke: var(--ink-2); stroke-width: 1; fill: none; }
+.leader.on { stroke: var(--accent); stroke-width: 2; }
+.hot { fill: none; stroke: var(--accent); stroke-width: 3; opacity: 0; }
+.hot.on { opacity: 1; }
+.noshape { display: grid; place-items: center; gap: 8px; min-height: 200px; text-align: center; color: var(--ink-2); padding: 20px; }
+.noshape svg { width: 72px; color: var(--metal-3); }
+
+.specs { display: grid; gap: 8px; }
+.row { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 4px 12px; cursor: pointer; }
+.row.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.row .num { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--ink); display: grid; place-items: center; font-family: var(--f-mono); font-size: 12px; font-weight: 600; margin-top: 1px; }
+.row.on .num { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.row .num.dot { border-style: dashed; color: var(--ink-2); }
+.row .name { font-weight: 600; line-height: 1.3; }
+.row .fast { color: var(--ink-2); font-size: 13px; }
+.tq { text-align: right; white-space: nowrap; }
+.tq .big { font-family: var(--f-mono); font-size: 20px; font-weight: 600; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.tq .alt { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-2); }
+.tq .none { font-size: 13px; color: var(--warn); font-weight: 600; }
+.row .more { grid-column: 2 / -1; display: grid; gap: 10px; padding-top: 8px; border-top: 1px dashed var(--line); margin-top: 6px; font-size: 14px; }
+.row .more p { margin: 0; }
+.k { font-weight: 600; }
+.pills { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pill { font-size: 11.5px; font-weight: 600; letter-spacing: .02em; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; }
+.pill.ver { background: var(--ok-bg); border-color: color-mix(in srgb, var(--ok) 40%, transparent); color: var(--ok); }
+.pill.unver { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, transparent); background: var(--warn-bg); }
+.pill.angle { font-family: var(--f-mono); color: var(--ink); }
+.pill svg { width: 12px; height: 12px; }
+
+.edit { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; padding-top: 10px; border-top: 1px dashed var(--line); margin-top: 6px; cursor: default; }
+.edit .wide { grid-column: 1 / -1; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field input, .field select, .field textarea { border: 1px solid var(--line); border-radius: 8px; background: var(--sunk); padding: 8px 10px; width: 100%; min-width: 0; }
+.field textarea { min-height: 60px; resize: vertical; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.edit .actions { grid-column: 1 / -1; }
+
+/* photos */
+.photos { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.thumb { width: 76px; height: 76px; border-radius: 9px; border: 1px solid var(--line); background: var(--sunk); padding: 0; overflow: hidden; display: grid; place-items: center; cursor: pointer; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb.add { border-style: dashed; color: var(--accent); font-size: 12px; font-weight: 600; text-align: center; line-height: 1.2; gap: 2px; align-content: center; }
+.thumb.add svg { width: 22px; height: 22px; }
+.thumb.busy { cursor: default; color: var(--ink-2); }
+.figphoto { margin-top: 12px; display: grid; gap: 6px; }
+.figphoto img { width: 100%; max-height: 260px; object-fit: cover; border-radius: 9px; border: 1px solid var(--line); cursor: zoom-in; background: var(--sunk); }
+
+/* guides */
+.ggrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.gcard { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 8px; align-content: start; }
+.gcard:hover { border-color: var(--ink-2); }
+.gcard h3 { font-size: 22px; font-weight: 600; }
+.gcard p { margin: 0; color: var(--ink-2); font-size: 14px; }
+.gmeta { display: flex; flex-wrap: wrap; gap: 6px; }
+.lvl { display: inline-flex; gap: 2px; align-items: center; }
+.lvl i { width: 6px; height: 12px; border-radius: 2px; background: var(--line); display: inline-block; }
+.lvl i.on { background: var(--accent); }
+.guide { padding: 18px; display: grid; gap: 16px; }
+.guide h2 { font-size: 30px; }
+.gcols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .gcols { grid-template-columns: minmax(0, 1fr); } }
+.box { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--sunk); display: grid; gap: 8px; align-content: start; }
+.box ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; }
+.steps li .box2 { width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--ink-2); display: grid; place-items: center; font-family: var(--f-mono); font-size: 12px; font-weight: 600; color: var(--ink-2); }
+.steps li.done { opacity: .62; }
+.steps li.done .box2 { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+.chip { display: inline-flex; align-items: baseline; gap: 4px; padding: 0 7px; border-radius: 6px; background: var(--accent-soft); color: var(--ink); font-weight: 600; white-space: normal; }
+.chip .mono { font-weight: 600; }
+.chip.missing { background: var(--warn-bg); color: var(--warn); }
+.warnbox { border-left: 4px solid var(--warn); background: var(--warn-bg); padding: 10px 12px; border-radius: 8px; font-size: 14px; }
+
+/* parts */
+.parts { padding: 16px 18px; display: grid; gap: 12px; }
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.part { border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; display: grid; gap: 5px; align-content: start; background: var(--sunk); }
+.part .v { font-weight: 600; overflow-wrap: anywhere; }
+.part .v.empty { color: var(--ink-2); font-weight: 400; font-style: italic; }
+.part .foot { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
+.flist { display: grid; gap: 6px; }
+.frow { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; border-bottom: 1px dashed var(--line); padding-bottom: 5px; flex-wrap: wrap; }
+.frow b { font-family: var(--f-mono); }
+.frow .buy { margin-left: auto; }
+.parts-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px 16px; flex-wrap: wrap; }
+.storepick { display: grid; gap: 3px; }
+.storepick select { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 6px 10px; font-weight: 500; }
+.btn.buy { text-decoration: none; color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.btn.buy svg { width: 16px; height: 16px; }
+.buylist { list-style: none; padding: 0 !important; }
+.buylist li { display: flex; justify-content: space-between; gap: 8px; align-items: center; flex-wrap: wrap; padding: 4px 0; border-bottom: 1px dashed var(--line); }
+
+/* sheet (add car / switch car) */
+.sheet-bg { position: fixed; inset: 0; z-index: 40; background: color-mix(in srgb, #000 45%, transparent); display: grid; place-items: end center; }
+@media (min-width: 700px) { .sheet-bg { place-items: center; } }
+.sheet { background: var(--surface); width: 100%; max-width: 560px; max-height: 92vh; overflow: auto; border-radius: 18px 18px 0 0; padding: 18px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); display: grid; gap: 14px; }
+@media (min-width: 700px) { .sheet { border-radius: 18px; } }
+.sheet-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.sheet h2 { font-size: 26px; }
+.or { display: flex; align-items: center; gap: 10px; color: var(--ink-2); font-size: 13px; }
+.or::before, .or::after { content: ""; height: 1px; background: var(--line); flex: 1; }
+.vin { font-family: var(--f-mono); letter-spacing: .12em; text-transform: uppercase; font-size: 17px !important; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.carlist { display: grid; gap: 8px; }
+.carlist button { text-align: left; border: 1px solid var(--line); background: var(--sunk); border-radius: 10px; padding: 10px 14px; display: grid; gap: 1px; }
+.carlist button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--accent-soft); }
+.carlist b { font-family: var(--f-display); font-size: 19px; font-weight: 600; }
+.carlist small { color: var(--ink-2); }
+
+/* welcome */
+.welcome { padding: 28px 22px; display: grid; gap: 16px; justify-items: start; }
+.welcome h1 { font-size: 42px; line-height: 1; max-width: 18ch; }
+.welcome p { margin: 0; color: var(--ink-2); max-width: 60ch; font-size: 16px; }
+
+.lb { position: fixed; inset: 0; z-index: 50; background: color-mix(in srgb, var(--shade) 88%, #000); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 10px;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 12px) calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.lb-top, .lb-bar { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; color: var(--hi); }
+.lb-top b { font-family: var(--f-display); font-size: 20px; font-weight: 600; }
+.lb img { width: 100%; height: 100%; object-fit: contain; min-height: 0; }
+.toast { position: fixed; z-index: 30; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); max-width: 560px; margin: 0 auto;
+  background: var(--ink); color: var(--bg); border-radius: 14px; padding: 12px 12px 12px 16px; display: flex; gap: 10px; align-items: flex-start; box-shadow: 0 8px 28px color-mix(in srgb, #000 30%, transparent); }
+.toast p { margin: 2px 0 8px; font-size: 13.5px; opacity: .85; }
+.toast .fit { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ctsetup { border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; justify-items: start; font-size: 14px; }
+.ctsetup p { margin: 0; max-width: 70ch; }
+.ctsetup .mono { background: var(--surface); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line); }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--accent); text-decoration: underline; font-size: inherit; cursor: pointer; }
+.toast .fit .mono { background: color-mix(in srgb, var(--bg) 14%, transparent); padding: 4px 8px; border-radius: 6px; font-size: 13px; overflow-wrap: anywhere; }
+.toast .btn { background: var(--bg); color: var(--ink); border-color: transparent; flex: none; }
+.svc { padding: 16px 18px; display: grid; gap: 12px; }
+.svc-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.logform { padding: 16px 18px; display: grid; gap: 12px; border-color: var(--accent); }
+.duegrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.due { background: var(--surface); border: 1px solid var(--line); border-left-width: 5px; border-radius: var(--r); padding: 12px 14px; display: grid; gap: 6px; align-content: start; }
+.due.over { border-left-color: var(--bad); }
+.due.soon { border-left-color: var(--warn); }
+.due.ok { border-left-color: var(--ok); }
+.due-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.due-foot { display: flex; justify-content: space-between; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+.ivform { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ivform .actions { grid-column: 1 / -1; }
+.pill.bad { background: color-mix(in srgb, var(--bad) 14%, transparent); border-color: color-mix(in srgb, var(--bad) 45%, transparent); color: var(--bad); }
+.pill.warnp { background: var(--warn-bg); border-color: color-mix(in srgb, var(--warn) 45%, transparent); color: var(--warn); }
+.hist { display: grid; gap: 4px; }
+.hrow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+@media (max-width: 560px) { .hrow { grid-template-columns: minmax(0, 1fr) auto; } }
+footer { color: var(--ink-2); font-size: 12.5px; max-width: 80ch; padding-bottom: 24px; }
+</style>
+
+<header class="appbar">
+  <div class="inner">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="var(--accent)"/><path d="M20.5 7.5a5 5 0 0 0-6.2 6.4l-6.6 6.6a1.8 1.8 0 0 0 2.5 2.5l6.6-6.6a5 5 0 0 0 6.4-6.2l-2.9 2.9-2.4-.6-.6-2.4z" fill="var(--accent-ink)"/></svg>
+      <b>DIY<span>gnose</span></b>
+    </div>
+    <button class="carbtn" id="carbtn" data-act="open-cars" aria-label="Switch car"></button>
+    <div class="seg" role="group" aria-label="Torque units">
+      <button id="u-ft" data-act="unit" data-unit="ft">ft-lb</button>
+      <button id="u-nm" data-act="unit" data-unit="nm">N·m</button>
+    </div>
+  </div>
+  <div class="inner"><nav class="views" id="views" role="tablist" aria-label="Sections"></nav></div>
+</header>
+<main class="inner" id="main"></main>
+<div class="inner"><footer>DIYgnose covers US and Canadian market vehicles. A spec marked <b>Verified</b> was checked against the factory service manual page shown next to it. Anything marked <b>Not verified</b> needs checking before you final-torque, especially brakes, suspension and single-use bolts.</footer></div>
+<div id="sheet"></div>
+<div id="lb"></div>
+<div id="toast"></div>
+
+<script>
+(() => {
+"use strict";
+
+/* ---------- reference data ---------- */
+const JOBS = [
+  { id: "wheels", name: "Wheels & brakes", diagram: "wheels" },
+  { id: "oil", name: "Oil change", diagram: "oil" },
+  { id: "ignition", name: "Engine & ignition", diagram: "ignition" },
+  { id: "suspension", name: "Suspension & steering", diagram: null },
+  { id: "drivetrain", name: "Fluids & drivetrain", diagram: null },
+  { id: "other", name: "Other bolts", diagram: null },
+];
+const ATLAS = {
+  lug: { job: "wheels", name: "Wheel lug nuts / bolts", range: [80, 140],
+    look: "The 4 to 6 nuts on the face of the wheel. Usually a 17, 19 or 21 mm socket. Many European cars use bolts instead of nuts.",
+    tip: "Tighten in a star pattern in two passes, with the tire on the ground. Re-check after 50 to 100 km. Keep threads clean and dry unless the maker says otherwise. Don't use an impact gun for the final torque.",
+    part: [180, 128], badge: [118, 86] },
+  bracket: { job: "wheels", name: "Caliper bracket (carrier) bolts", range: [80, 170],
+    look: "Two large bolts on the back of the steering knuckle, holding the bracket the pads sit in. Usually 14 to 19 mm, sometimes Torx T-55 or 12-point.",
+    tip: "The highest torque on the caliper. Often specified with thread locker or new bolts. Clean the threads before reinstalling.",
+    part: [272, 75], badge: [334, 42] },
+  pin: { job: "wheels", name: "Caliper guide (slide) pin bolts", range: [22, 45],
+    look: "Two smaller bolts on the back of the caliper body, often under rubber boots. Usually 12 to 14 mm, with a 15 to 17 mm flat on the pin you hold with an open-end wrench.",
+    tip: "Hold the pin flats while tightening so the boot doesn't twist. Grease the pins with silicone brake grease, not the bolt threads.",
+    part: [288, 122], badge: [372, 96] },
+  bleeder: { job: "wheels", name: "Brake bleeder screw", range: [7, 14],
+    look: "Small nipple at the top of the caliper with a rubber dust cap. 8 to 11 mm.",
+    tip: "Very low torque and easy to snap. Snug it, don't crank it. Use a 6-point box wrench.",
+    part: [318, 150], badge: [392, 150] },
+  banjo: { job: "wheels", name: "Brake hose banjo bolt", range: [17, 40],
+    look: "Hollow bolt where the rubber brake hose joins the caliper, with a copper washer on each side. 12 to 14 mm.",
+    tip: "Fit new copper crush washers every time. Bleed the brakes afterwards.",
+    part: [318, 194], badge: [392, 206] },
+  axle: { job: "wheels", name: "Axle / hub nut", range: [150, 350],
+    look: "Big center nut behind the hub cap or center cap. 30 to 36 mm socket. Often staked into a notch or locked with a cotter pin.",
+    tip: "Many are single-use (staked or nylon-insert). Some specs are torque plus angle. Final-torque with the wheel on the ground or the hub locked.",
+    part: [180, 170], badge: [96, 218] },
+  tierod: { job: "wheels", name: "Outer tie rod end nut", range: [35, 70],
+    look: "Nut on the tapered stud where the steering rod meets the knuckle arm. 17 to 19 mm, sometimes a castle nut with a cotter pin.",
+    tip: "Castle nut: torque to spec, then tighten to the next slot for the cotter pin. Never back it off to line up the slot.",
+    part: [62, 286], badge: [30, 318] },
+  balljoint: { job: "wheels", name: "Lower ball joint pinch bolt / nut", range: [50, 120],
+    look: "Bolt clamping the ball joint stud at the bottom of the knuckle, or a nut on the stud. 17 to 21 mm.",
+    tip: "Final-torque rubber-bushed suspension bolts with the car at ride height, wheels loaded.",
+    part: [180, 312], badge: [244, 326] },
+
+  drain: { job: "oil", name: "Oil drain plug", range: [25, 45],
+    look: "Bolt at the lowest point of the oil pan. 13 to 17 mm hex, some use an 8 mm square or Torx.",
+    tip: "Replace the crush washer every change. Aluminum pans strip easily. Some plastic pans use a quarter-turn plug that is not torqued.",
+    part: [298, 300], badge: [368, 318] },
+  filter: { job: "oil", name: "Spin-on oil filter", range: null, hand: "Hand-tight: ¾ to 1 turn after the gasket touches",
+    look: "Metal canister screwed onto the side or bottom of the engine block.",
+    tip: "Wipe a film of clean oil on the new gasket. Check the old gasket came off with the old filter, or it will leak.",
+    part: [64, 192], badge: [30, 128] },
+  cartridge: { job: "oil", name: "Cartridge filter housing cap", range: [18, 35],
+    look: "Plastic or aluminum cap on top or front of the engine with a large hex (27, 32 or 36 mm). Holds a paper filter element.",
+    tip: "Replace the O-ring that comes with the element. Plastic caps crack if over-tightened.",
+    part: [330, 72], badge: [392, 36] },
+  sump: { job: "oil", name: "Oil pan bolts", range: [8, 12],
+    look: "Row of small 10 mm bolts around the oil pan flange.",
+    tip: "Tighten from the center outward in a crisscross. These are usually in in-lb on US manuals.",
+    part: [110, 242], badge: [46, 262] },
+  fill: { job: "oil", name: "Oil filler cap", range: null, hand: "Hand-tight",
+    look: "Twist cap on the valve cover, usually marked with an oil-can symbol or the oil grade.",
+    tip: "Check the grade printed on it. Make sure the seal is seated.",
+    part: [170, 58], badge: [170, 18] },
+
+  plug: { job: "ignition", name: "Spark plugs", range: [18, 30],
+    look: "Down the holes under the ignition coils. 5/8 in (16 mm) or 14 mm thin-wall spark plug socket.",
+    tip: "Torque depends on thread size and seat type. Many plug makers say no anti-seize on plated plugs; if you use it, reduce torque about 20%. Only on a cold engine.",
+    part: [352, 214], badge: [398, 176] },
+  coil: { job: "ignition", name: "Ignition coil bolts", range: [6, 12],
+    look: "One small 8 or 10 mm bolt holding each coil-on-plug to the valve cover.",
+    tip: "Low torque, often into plastic or thin aluminum.",
+    part: [135, 132], badge: [135, 34] },
+  valvecover: { job: "ignition", name: "Valve cover bolts", range: [8, 12],
+    look: "Small 10 mm bolts or studs around the edge of the valve cover.",
+    tip: "Tighten in the manual's sequence, usually center outward. Over-tightening warps the cover and causes leaks.",
+    part: [40, 76], badge: [24, 34] },
+  throttle: { job: "ignition", name: "Throttle body bolts", range: [8, 12],
+    look: "Four small bolts or nuts holding the throttle body to the intake manifold.",
+    tip: "Replace the gasket if it's damaged. Tighten evenly in a crisscross." },
+
+  strutTop: { job: "suspension", name: "Strut top mount nuts", range: [25, 60],
+    look: "Three or so nuts on the strut tower under the hood or in the trunk, around the center shaft nut.",
+    tip: "Don't touch the center shaft nut unless the strut is in a spring compressor." },
+  strutKnuckle: { job: "suspension", name: "Strut-to-knuckle bolts", range: [100, 200],
+    look: "Two large through-bolts clamping the bottom of the strut to the steering knuckle. 17 to 22 mm.",
+    tip: "Often torque plus angle, and some have an eccentric cam for camber. Get an alignment afterwards." },
+  swaybar: { job: "suspension", name: "Sway bar link nuts", range: [35, 70],
+    look: "Nuts on the ball studs at each end of the short link from the sway bar to the strut or control arm. Often a hex or Torx socket in the stud end to hold it still.",
+    tip: "Hold the stud with an Allen or Torx bit so it doesn't spin. Torque at ride height." },
+  controlArm: { job: "suspension", name: "Lower control arm bolts", range: [90, 180],
+    look: "Large bolts through the rubber bushings where the control arm meets the subframe.",
+    tip: "Snug only, then final-torque at ride height so the bushings aren't preloaded." },
+
+  transPlug: { job: "drivetrain", name: "Transmission drain / fill plugs", range: [25, 50],
+    look: "Plugs on the gearbox case. Often a 10 mm hex (Allen) or 17 to 24 mm hex. The fill plug is higher on the case.",
+    tip: "Loosen the fill plug first, so you know you can refill before you drain. Use a new washer." },
+  diffPlug: { job: "drivetrain", name: "Differential drain / fill plugs", range: [35, 70],
+    look: "Plugs on the axle housing, often a 3/8 in or 1/2 in square drive or large hex.",
+    tip: "Fill until oil just starts to drip from the fill hole." },
+  coolantDrain: { job: "drivetrain", name: "Radiator drain cock", range: null, hand: "Hand-tight",
+    look: "Plastic wing-nut or plug at the bottom corner of the radiator.",
+    tip: "Plastic. Don't use pliers on it." },
+  battery: { job: "drivetrain", name: "Battery terminal nuts", range: [4, 8],
+    look: "8 or 10 mm nuts clamping the cable ends to the battery posts.",
+    tip: "Disconnect negative first, reconnect it last." },
+};
+const ATLAS_IDS = Object.keys(ATLAS);
+
+const PARTS = [
+  { key: "engineOil", label: "Engine oil", hint: "Factory manual MA section, Fluids and Lubricants." },
+  { key: "oilCapacity", label: "Oil capacity (with filter)", hint: "Factory manual MA section. Fill a little under, run the engine, then top up to the dipstick." },
+  { key: "oilFilter", label: "Oil filter (OEM)", hint: "OEM part number from the dealer parts catalog." },
+  { key: "drainWasher", label: "Drain plug washer", hint: "OEM parts catalog." },
+  { key: "sparkPlug", label: "Spark plugs & gap", hint: "Factory manual EM or MA section." },
+  { key: "airFilter", label: "Engine air filter", hint: "OEM parts catalog." },
+  { key: "cabinFilter", label: "Cabin air filter", hint: "OEM parts catalog." },
+  { key: "coolant", label: "Coolant", hint: "Factory manual MA or CO section." },
+  { key: "brakeFluid", label: "Brake fluid", hint: "Factory manual MA section, also on the reservoir cap." },
+  { key: "transFluid", label: "Transmission fluid", hint: "Factory manual MA or TM section." },
+  { key: "tirePressure", label: "Tire pressure (cold)", hint: "Driver's door jamb placard, also in the WT section." },
+  { key: "wheelFastener", label: "Lug thread & socket", hint: "Factory manual WT section." },
+  { key: "battery", label: "Battery group size", hint: "Label on the battery or the OEM parts catalog." },
+  { key: "wipers", label: "Wiper blade sizes", hint: "Owner's manual or the old blades." },
+];
+const PART_KEYS = PARTS.map((p) => p.key);
+
+// DIY guides. Tokens: {spec:<atlasId>} shows this car's torque, {part:<key>} shows this car's part or fluid.
+const GUIDES = [
+  { id: "oil", title: "Oil & filter change", time: "30–45 min", level: 1, job: "oil",
+    blurb: "Drain the old oil, swap the filter and refill with the right oil.",
+    tools: ["Socket or wrench for the drain plug", "Oil filter wrench", "Drain pan and funnel", "Ramps or jack and jack stands", "Torque wrench", "Gloves and rags"],
+    parts: ["engineOil", "oilCapacity", "oilFilter", "drainWasher"],
+    steps: [
+      "Run the engine for 2–3 minutes so the oil flows, then turn it off.",
+      "Raise the car on ramps or jack stands on level ground. Never work under a car held up only by a jack.",
+      "Put the drain pan under the oil pan and remove the drain plug. Let it drain completely.",
+      "Fit a new drain plug washer ({part:drainWasher}) and tighten the plug to {spec:drain}.",
+      "Unscrew the old filter. Make sure its rubber gasket came off with it.",
+      "Wipe the mounting face, smear clean oil on the new filter's gasket and install {part:oilFilter}. {spec:filter}",
+      "Lower the car and pour in {part:engineOil}. Capacity is {part:oilCapacity}: add about half a quart less, then check.",
+      "Start the engine, check for leaks around the plug and filter, shut it off and wait a minute.",
+      "Check the dipstick and top up to the full mark. Reset the oil-life reminder.",
+    ] },
+  { id: "pads", title: "Brake pad replacement", time: "1–2 hours per axle", level: 2, job: "wheels",
+    blurb: "Swap worn pads, clean the hardware and torque the caliper correctly.",
+    tools: ["Lug wrench and torque wrench", "Jack and jack stands", "Sockets for caliper bolts", "Piston tool or large C-clamp", "Brake cleaner, wire brush", "Brake grease"],
+    parts: ["brakeFluid"],
+    steps: [
+      "Loosen the lug nuts a half turn with the wheels on the ground, then raise the car and support it on jack stands.",
+      "Remove the wheel. Check the brake fluid level; if it's at MAX, remove a little so it won't overflow when you push the piston back.",
+      "Remove the caliper bolts: {spec:pin} Hang the caliper with wire. Don't let it hang by the brake hose.",
+      "Remove the old pads, shims and clips. Clean the bracket where the clips sit with a wire brush.",
+      "Measure the rotor thickness. Replace the rotor if it's under the minimum stamped on it or in the manual.",
+      "Push the piston back with the piston tool. Install new clips, apply grease where the manual shows, and fit the new pads and shims.",
+      "Refit the caliper and tighten: {spec:pin} If you removed the bracket: {spec:bracket}",
+      "Refit the wheel and tighten the lug nuts in a star pattern to {spec:lug} with the tire on the ground.",
+      "Pump the brake pedal until it's firm before you move the car. Bed in the pads with several moderate stops.",
+    ] },
+  { id: "rotation", title: "Tire rotation", time: "30–45 min", level: 1, job: "wheels",
+    blurb: "Move tires around to even out wear. Set pressures after.",
+    tools: ["Lug wrench and torque wrench", "Jack and jack stands", "Tire pressure gauge"],
+    parts: ["tirePressure", "wheelFastener"],
+    steps: [
+      "Check your manual for the rotation pattern. Directional tires only move front to back on the same side.",
+      "Loosen all lug nuts a half turn while the car is on the ground.",
+      "Raise one side or the whole car and support it on jack stands.",
+      "Swap the wheels following the pattern. Check each tire for nails, cuts and uneven wear.",
+      "Snug the lug nuts by hand in a star pattern, lower the car, then torque to {spec:lug}.",
+      "Set cold tire pressure to {part:tirePressure}. Re-check the lug nuts after 50–100 km.",
+    ] },
+  { id: "plugs", title: "Spark plug replacement", time: "1–3 hours", level: 2, job: "ignition",
+    blurb: "Replace worn plugs on a cold engine and torque them right.",
+    tools: ["Spark plug socket and extension", "Torque wrench", "Gap tool", "Small socket for the coil bolts"],
+    parts: ["sparkPlug"],
+    steps: [
+      "Work on a cold engine only. Disconnect the battery negative if your manual says to.",
+      "Unplug each ignition coil and remove its bolt. Pull the coil straight up.",
+      "Blow debris out of the plug well before removing the plug, so nothing falls into the cylinder.",
+      "Remove the old plug. Check the new plug gap matches {part:sparkPlug}.",
+      "Thread the new plug in by hand first, then tighten to {spec:plug}.",
+      "Refit the coil and tighten its bolt to {spec:coil}. Reconnect the coil plug.",
+      "On V6 engines the rear plugs can need the intake plenum removed. Follow your manual's EM section.",
+    ] },
+  { id: "airfilter", title: "Engine air filter", time: "5–10 min", level: 1, job: "other",
+    blurb: "Swap the filter in the air box under the hood.",
+    tools: ["Screwdriver if the air box uses screws"],
+    parts: ["airFilter"],
+    steps: [
+      "Open the air filter box by releasing the clips or screws.",
+      "Note which way the old filter sits, then lift it out.",
+      "Wipe out leaves and dirt from the box.",
+      "Fit the new filter ({part:airFilter}) so it seals all the way around, and close the box.",
+    ] },
+  { id: "cabin", title: "Cabin air filter", time: "10–15 min", level: 1, job: "other",
+    blurb: "Usually behind the glove box. Improves A/C airflow and smell.",
+    tools: ["None for most cars"],
+    parts: ["cabinFilter"],
+    steps: [
+      "Empty the glove box and release its stops so it drops down.",
+      "Unclip the filter cover and slide out the old filter. Note the airflow arrow.",
+      "Slide in the new filter ({part:cabinFilter}) with the arrow pointing the same way.",
+      "Refit the cover and the glove box.",
+    ] },
+  { id: "bleed", title: "Brake fluid flush", time: "45–60 min", level: 2, job: "wheels",
+    blurb: "Replace old brake fluid by bleeding each caliper.",
+    tools: ["Bleeder wrench", "Clear tube and bottle", "Turkey baster", "Helper or one-person bleeder"],
+    parts: ["brakeFluid"],
+    steps: [
+      "Use only {part:brakeFluid} from a sealed bottle. Brake fluid damages paint: wipe spills right away.",
+      "Remove most of the old fluid from the reservoir and refill with new fluid.",
+      "Follow the bleeding order in your manual's BR section. Never let the reservoir run low.",
+      "At each caliper, fit the tube, open the bleeder while your helper holds the pedal, close it before the pedal is released. Repeat until clear fluid comes out.",
+      "Tighten each bleeder to {spec:bleeder}. Refit the dust caps.",
+      "Top up to MAX and check the pedal is firm before driving.",
+    ] },
+  { id: "coolant", title: "Coolant drain & refill", time: "1–2 hours", level: 2, job: "drivetrain",
+    blurb: "Drain old coolant and refill without trapping air.",
+    tools: ["Drain pan", "Funnel (a spill-free funnel helps)", "Gloves"],
+    parts: ["coolant"],
+    steps: [
+      "Only work on a cold engine. Never open the radiator cap when it's hot.",
+      "Open the radiator drain cock ({spec:coolantDrain}) and drain into the pan.",
+      "Close the drain and refill with {part:coolant}.",
+      "Bleed air as your manual's CO section describes, then top up the reservoir.",
+      "Old coolant is toxic and sweet-tasting to pets. Take it to a recycling center.",
+    ] },
+  { id: "battery", title: "Battery replacement", time: "15–30 min", level: 1, job: "drivetrain",
+    blurb: "Swap the battery safely and keep your settings.",
+    tools: ["10 mm wrench or socket", "Terminal brush"],
+    parts: ["battery"],
+    steps: [
+      "Turn everything off and remove the key.",
+      "Disconnect the negative (−) cable first, then the positive (+).",
+      "Remove the hold-down and lift the battery out. It's heavy: lift with your legs.",
+      "Clean the cable ends, fit the new battery ({part:battery}) and the hold-down.",
+      "Connect positive first, then negative. Tighten the terminals to {spec:battery}.",
+      "Reset the clock, radio and windows if needed. Recycle the old battery.",
+    ] },
+  { id: "wipers", title: "Wiper blades", time: "5 min", level: 1, job: "other",
+    blurb: "Fresh blades for a streak-free windshield.",
+    tools: ["None"],
+    parts: ["wipers"],
+    steps: [
+      "Lift the wiper arm away from the glass. Put a towel on the glass in case the arm snaps back.",
+      "Press the release tab and slide the old blade off the hook.",
+      "Slide on the new blade ({part:wipers}) until it clicks, then lower the arm gently.",
+    ] },
+  { id: "trans", title: "Transmission fluid drain & fill", time: "1–2 hours", level: 3, job: "drivetrain",
+    blurb: "Advanced. Many modern automatics need a fluid temperature check.",
+    tools: ["Socket or hex for the plugs", "Fluid pump", "Scan tool or IR thermometer"],
+    parts: ["transFluid"],
+    steps: [
+      "Use only {part:transFluid}. The wrong fluid can damage the transmission.",
+      "Remove the fill or check plug first, so you know you can refill.",
+      "Drain from the drain plug, fit a new washer and tighten to {spec:transPlug}.",
+      "Refill and check the level exactly as your manual's TM section says, usually at a set fluid temperature with the engine running.",
+    ] },
+];
+
+// Where to get factory service information in the US and Canada.
+const MANUALS = {
+  Nissan: { name: "NICOclub factory service manuals", url: "https://www.nicoclub.com/nissan-service-manuals" },
+  Infiniti: { name: "NICOclub factory service manuals", url: "https://www.nicoclub.com/infiniti-service-manuals" },
+  Toyota: { name: "Toyota TIS (paid, short-term access)", url: "https://techinfo.toyota.com" },
+  Lexus: { name: "Toyota TIS (paid, short-term access)", url: "https://techinfo.toyota.com" },
+  Scion: { name: "Toyota TIS (paid, short-term access)", url: "https://techinfo.toyota.com" },
+  Honda: { name: "Honda Service Express (paid)", url: "https://techinfo.honda.com" },
+  Acura: { name: "Honda Service Express (paid)", url: "https://techinfo.honda.com" },
+  Ford: { name: "Motorcraft Service (paid)", url: "https://www.motorcraftservice.com" },
+  Lincoln: { name: "Motorcraft Service (paid)", url: "https://www.motorcraftservice.com" },
+  Mercury: { name: "Motorcraft Service (paid)", url: "https://www.motorcraftservice.com" },
+  Chevrolet: { name: "ACDelco TDS (paid)", url: "https://www.acdelcotds.com" },
+  GMC: { name: "ACDelco TDS (paid)", url: "https://www.acdelcotds.com" },
+  Buick: { name: "ACDelco TDS (paid)", url: "https://www.acdelcotds.com" },
+  Cadillac: { name: "ACDelco TDS (paid)", url: "https://www.acdelcotds.com" },
+  Hyundai: { name: "Hyundai Tech Info (paid)", url: "https://www.hyundaitechinfo.com" },
+  Genesis: { name: "Hyundai Tech Info (paid)", url: "https://www.hyundaitechinfo.com" },
+  Kia: { name: "Kia Tech Info (paid)", url: "https://www.kiatechinfo.com" },
+  Subaru: { name: "Subaru Tech Info (paid)", url: "https://techinfo.subaru.com" },
+  Mazda: { name: "Mazda Service Info (paid)", url: "https://www.mazdaserviceinfo.com" },
+};
+// Canadian Tire. Their site remembers the shopper's vehicle in its own browser storage (no link can set it),
+// and once it's saved, these category pages list only parts that fit that vehicle.
+const CT = "https://www.canadiantire.ca/en/cat/automotive/";
+const CT_CATEGORY = {
+  oilFilter: { label: "oil filters", path: "auto-parts/filters-pcv-valves/oil-filters-DC0000173.html" },
+  airFilter: { label: "engine air filters", path: "auto-parts/filters-pcv-valves/engine-air-filters-DC0000174.html" },
+  cabinFilter: { label: "cabin air filters", path: "auto-parts/filters-pcv-valves/cabin-air-filters-DC0000175.html" },
+  sparkPlug: { label: "spark plugs", path: "auto-parts/engine-ignition/spark-plugs-DC0000162.html" },
+  wipers: { label: "wiper blades", path: "auto-parts/wiper-blades-parts-DC0000132.html" },
+  engineOil: { label: "engine oil", path: "oils-fluids-additives-chemicals/engine-oils-additives-DC0000349.html" },
+  coolant: { label: "antifreeze & coolant", path: "oils-fluids-additives-chemicals/antifreeze-coolant-system-additives-chemicals-DC0000357.html" },
+  transFluid: { label: "transmission fluid", path: "oils-fluids-additives-chemicals/transmission-fluids-additives-DC0000354.html" },
+  brakeFluid: { label: "brake fluid", path: "oils-fluids-additives-chemicals/brake-power-steering-fluids-additives-DC0000351.html" },
+};
+const CT_SEARCH = {
+  drainWasher: (val, v) => val || `${vName(v)} oil drain plug gasket`,
+  battery: (val) => (val ? `${val} battery`.replace(/battery battery/i, "battery") : "car battery"),
+};
+const ctReady = (v) => LS.get("diygnose.ct." + v.id) === "1";
+function buyLink(v, key) {
+  const cat = CT_CATEGORY[key], srch = CT_SEARCH[key];
+  if (!cat && !srch) return "";
+  const href = cat ? CT + cat.path : `https://www.canadiantire.ca/en/search-results.html?q=${encodeURIComponent(srch((v.parts || {})[key]?.value || "", v))}`;
+  return `<a class="btn small buy" data-act="buy" href="${esc(href)}" target="_blank" rel="noopener" title="Shop ${esc(cat ? cat.label : "this part")} at Canadian Tire"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2 9h9l2-6H6.2"/><circle cx="8" cy="16.5" r="1.3"/><circle cx="15" cy="16.5" r="1.3"/></svg>${cat ? "Shop " + esc(cat.label) : "Search Canadian Tire"}</a>`;
+}
+const partBuy = (v, key) => buyLink(v, key);
+function ctSetupNote(v) {
+  if (ctReady(v)) return `<p class="muted" style="margin:0;font-size:13.5px">Shop buttons open Canadian Tire showing only parts that fit your ${esc(vName(v))}. <button class="linkbtn" data-act="ct-reset">Show the setup steps again</button></p>`;
+  return `<div class="ctsetup"><b>One-time setup for Canadian Tire</b>
+    <p>Canadian Tire keeps your car on its own site, so add it there once on each phone or browser. Tap any Shop button, then on Canadian Tire tap <b>Add Vehicle</b> and choose:</p>
+    <span class="mono">${esc(v.year)} · ${esc(String(v.make).toUpperCase())} · ${esc(v.model)} · Region CAN</span>
+    <p>After that, every Shop button here opens straight to the parts that fit.</p>
+    <button class="btn small primary" data-act="ct-done">I've added it on Canadian Tire</button></div>`;
+}
+
+// NICOclub section files for Nissan / Infiniti.
+const FSM_SECTIONS = [
+  ["WT", "Road wheels & tires: lug nuts, tire pressure"], ["LU", "Engine lubrication: drain plug, oil filter"], ["MA", "Maintenance: oil type, capacities, fluids"],
+  ["EM", "Engine mechanical: spark plugs, coils"], ["FAX", "Front axle: hub nuts"], ["RAX", "Rear axle: hub nuts"],
+  ["FSU", "Front suspension"], ["RSU", "Rear suspension"], ["ST", "Steering: tie rod ends"],
+  ["TM", "Transmission: drain and fill plugs"], ["DLN", "Driveline: differential, transfer case"], ["CO", "Engine cooling: coolant drain"],
+];
+function fsmLinks(v) {
+  if (!/^(Nissan|Infiniti)$/i.test(v.make)) return "";
+  const folder = v.fsmFolder || `${String(v.model).replace(/\s+/g, "")}/${v.year}`;
+  return `<div class="links">${FSM_SECTIONS.map(([code, what]) => `<a href="https://www.nicoclub.com/service-manual?fsm=${encodeURIComponent(folder + "/" + code + ".pdf")}" target="_blank" rel="noopener">${code}.pdf · ${esc(what)}</a>`).join("")}</div>`;
+}
+
+/* ---------- state ---------- */
+const S = {
+  vehicles: [], ready: false, storage: "pending",
+  active: null, view: "specs", job: "wheels", unit: "ft", dist: "km", logJob: null, editInterval: null, guide: null,
+  selected: null, editing: null, editingPart: null,
+  busy: {}, notice: {}, armedDelete: null, showManual: false,
+  assets: null, uploading: {}, photoErr: {}, viewer: null,
+  sheet: null, W: null, models: null,
+};
+const MAX_PHOTOS = 8;
+const LS = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+{ const u = LS.get("diygnose.unit"); if (u === "ft" || u === "nm") S.unit = u; const dd = LS.get("diygnose.dist"); if (dd === "km" || dd === "mi") S.dist = dd; const a = LS.get("diygnose.active"); if (a) S.active = a; }
+
+const $ = (s) => document.querySelector(s);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+const vehicle = () => S.vehicles.find((v) => v.id === S.active) || null;
+const vName = (v) => [v.year, v.make, v.model].filter(Boolean).join(" ");
+const vSub = (v) => [v.trim, v.engine].filter(Boolean).join(" · ");
+const ICON_CHECK = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 6.5l2.2 2.2L9.5 3.5"/></svg>`;
+
+/* ---------- units ---------- */
+const toFt = (nm) => nm * 0.737562;
+const toIn = (nm) => nm * 8.85075;
+const r = (n) => (n < 10 ? Math.round(n * 10) / 10 : Math.round(n));
+function torque(nm) {
+  const ft = toFt(nm);
+  const ftTxt = ft < 12 ? `${Math.round(toIn(nm))} in-lb` : `${r(ft)} ft-lb`;
+  return S.unit === "nm" ? { big: `${r(nm)} N·m`, alt: ftTxt } : { big: ftTxt, alt: `${r(nm)} N·m` };
+}
+
+/* ---------- storage ---------- */
+let db = null, prefsRef = null;
+const chains = {};
+const store = {
+  save(v) {
+    const body = JSON.parse(JSON.stringify(v)); delete body.id;
+    if (db) {
+      chains[v.id] = (chains[v.id] || Promise.resolve()).then(() => db.collection("vehicles").doc(v.id).set(body)).catch((e) => {
+        S.notice[v.id] = { err: true, text: e && e.code === "quota_exceeded" ? "Storage is full. Remove a car to save more." : "Couldn't save that change. Check your connection and try again." };
+        render();
+      });
+      return chains[v.id];
+    }
+    saveLocal(); return Promise.resolve();
+  },
+  remove(id) { if (db) return db.collection("vehicles").doc(id).delete(); saveLocal(); return Promise.resolve(); },
+};
+function saveLocal() { LS.set("diygnose.vehicles", JSON.stringify(S.vehicles)); }
+function loadLocal() { try { return JSON.parse(LS.get("diygnose.vehicles") || "[]"); } catch (e) { return []; } }
+function upsert(v) {
+  const i = S.vehicles.findIndex((x) => x.id === v.id);
+  if (i < 0) S.vehicles.push(v); else S.vehicles[i] = v;
+  return store.save(v);
+}
+let prefsTimer = null;
+function savePrefs() {
+  LS.set("diygnose.unit", S.unit); LS.set("diygnose.dist", S.dist); if (S.active) LS.set("diygnose.active", S.active);
+  if (!prefsRef) return;
+  clearTimeout(prefsTimer);
+  prefsTimer = setTimeout(() => prefsRef.set({ unit: S.unit, dist: S.dist, active: S.active || null }).catch(() => {}), 400);
+}
+
+async function initStorage() {
+  const c = window.diyHost;
+  db = c && c.use ? await c.use("db").catch(() => null) : null;
+  if (!db) {
+    S.vehicles = loadLocal(); S.storage = "local";
+    // Without host storage, a garage.json next to the page seeds an empty garage.
+    if (!S.vehicles.length) {
+      try { const res = await fetch("garage.json", { cache: "no-store" }); if (res.ok) { const g = await res.json(); if (Array.isArray(g)) { S.vehicles = g; saveLocal(); } } } catch (e) {}
+    }
+    S.ready = true; render(); return;
+  }
+  S.storage = "db";
+  c.use("assets").then((a) => { S.assets = a; render(); }).catch(() => {});
+  c.use("user").then(async (u) => {
+    const id = u && (await u.id());
+    if (!id) return;
+    prefsRef = db.doc(`data/users/${id}/prefs`);
+    const snap = await prefsRef.get().catch(() => null);
+    const p = snap && snap.exists ? snap.data() : null;
+    if (p) {
+      if (p.unit === "ft" || p.unit === "nm") S.unit = p.unit;
+      if (p.dist === "km" || p.dist === "mi") S.dist = p.dist;
+      if (p.active && S.vehicles.some((v) => v.id === p.active)) S.active = p.active;
+      LS.set("diygnose.unit", S.unit); render();
+    } else savePrefs();
+  }).catch(() => {});
+  db.collection("vehicles").orderBy("createdAt").onSnapshot((snap) => {
+    S.vehicles = snap.docs.map((d) => ({ id: d.id, ...JSON.parse(JSON.stringify(d.data())) }));
+    S.ready = true; render();
+  }, () => { S.ready = true; S.storage = "error"; render(); });
+}
+
+let samplePromise = null;
+function getSample() {
+  const c = window.diyHost;
+  if (!samplePromise) samplePromise = c && c.use ? c.use("sample").catch(() => null) : Promise.resolve(null);
+  return samplePromise;
+}
+async function loadModels() {
+  if (S.models) return S.models;
+  try { const res = await fetch("vehicles.json"); if (res.ok) S.models = await res.json(); } catch (e) {}
+  if (!S.models) S.models = {};
+  return S.models;
+}
+
+/* ---------- VIN ---------- */
+const VIN_VAL = { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8, J: 1, K: 2, L: 3, M: 4, N: 5, P: 7, R: 9, S: 2, T: 3, U: 4, V: 5, W: 6, X: 7, Y: 8, Z: 9 };
+const VIN_W = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2];
+const cleanVin = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const vinShape = (v) => /^[A-HJ-NPR-Z0-9]{17}$/.test(v);
+function vinCheckOk(v) {
+  let sum = 0;
+  for (let i = 0; i < 17; i++) { const ch = v[i]; sum += (/\d/.test(ch) ? +ch : VIN_VAL[ch] || 0) * VIN_W[i]; }
+  const rem = sum % 11; return (rem === 10 ? "X" : String(rem)) === v[8];
+}
+function vinYear(v) {
+  const codes = "ABCDEFGHJKLMNPRSTVWXY123456789";
+  const i = codes.indexOf(v[9]); if (i < 0) return null;
+  const base = /[A-Z]/.test(v[6]) ? 2010 : 1980;
+  const y = base + i; return y > new Date().getFullYear() + 1 ? y - 30 : y;
+}
+const titleCase = (s) => String(s || "").toLowerCase().replace(/(^|[\s-])([a-z])/g, (m, a, b) => a + b.toUpperCase()).replace(/\bBmw\b/, "BMW").replace(/\bGmc\b/, "GMC").replace(/\bMini\b/, "MINI");
+
+async function decodeVin(vin) {
+  const year = vinYear(vin);
+  // NHTSA vPIC first (works where the page may reach it), then the built-in lookup.
+  try {
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 7000);
+    const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`, { signal: ctl.signal });
+    clearTimeout(t);
+    const j = await res.json(); const x = j && j.Results && j.Results[0];
+    if (x && x.Make) {
+      const eng = [x.DisplacementL && `${(+x.DisplacementL).toFixed(1)}L`, x.EngineCylinders && `${x.EngineConfiguration === "V-Shaped" ? "V" : x.EngineConfiguration === "In-Line" ? "I" : ""}${x.EngineCylinders}`.replace(/^(\d)/, "$1-cyl"), x.EngineModel].filter(Boolean).join(" ");
+      return { source: "NHTSA", year: +x.ModelYear || year, make: titleCase(x.Make), model: x.Model || "", trim: [x.Trim, x.Series].filter(Boolean).join(" "), engine: eng, drive: x.DriveType || "" };
+    }
+  } catch (e) {}
+  const sample = await getSample();
+  if (!sample) return { source: "local", year };
+  const res = await sample.json(`Decode this North American VIN: ${vin}. Model year from position 10 is ${year}.
+Return the US/Canada market make, model, trim (if the VIN encodes it), engine and drive type. Use null for anything the VIN does not tell you.
+Reply with only JSON: {"make": "Infiniti", "model": "QX50", "trim": "Journey", "engine": "3.7L V6 VQ37VHR", "drive": "AWD"}`, { modelTier: "default" });
+  return { source: "lookup", year, make: res && res.make ? titleCase(res.make) : "", model: res?.model || "", trim: res?.trim || "", engine: res?.engine || "", drive: res?.drive || "" };
+}
+async function vinFromPhoto(file) {
+  if ("BarcodeDetector" in window) {
+    try {
+      const det = new window.BarcodeDetector({ formats: ["code_39", "code_128", "data_matrix", "qr_code"] });
+      const bmp = await createImageBitmap(file);
+      for (const b of await det.detect(bmp)) { const v = cleanVin(b.rawValue).replace(/^I/, ""); if (vinShape(v)) return v; }
+    } catch (e) {}
+  }
+  const sample = await getSample();
+  if (!sample) throw { code: "no_reader" };
+  const lim = await sample.limits().catch(() => null);
+  if (!lim || !lim.images) throw { code: "no_reader" };
+  const img = await shrink(file, 1600);
+  const res = await sample.json(`This photo shows a vehicle VIN (on a door-jamb sticker, the dashboard plate, or a registration card). Read the 17-character VIN exactly. VINs never contain I, O or Q. Reply with only JSON: {"vin": "JN1BJ0RR5EM123456"} or {"vin": null} if no VIN is readable.`, { images: [img], modelTier: "default" });
+  const v = cleanVin(res && res.vin);
+  if (!vinShape(v)) throw { code: "unreadable" };
+  return v;
+}
+
+/* ---------- photos ---------- */
+const blobUrl = (id) => "/_blob/" + encodeURIComponent(id);
+const ownerOf = (specId) => S.vehicles.find((v) => (v.specs || []).some((s) => s.id === specId)) || null;
+async function shrink(file, max = 1600) {
+  let img;
+  try { img = await createImageBitmap(file, { imageOrientation: "from-image" }); }
+  catch (e) { img = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = URL.createObjectURL(file); }); }
+  const k = Math.min(1, max / Math.max(img.width, img.height));
+  const cv = document.createElement("canvas");
+  cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+  cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+  return new Promise((res, rej) => cv.toBlob((b) => (b ? res(b) : rej({ code: "decode" })), "image/jpeg", 0.85));
+}
+function photoErrText(e) {
+  const code = e && e.code;
+  if (code === "decode" || !code) return "Couldn't read that image. Try a JPEG or PNG photo.";
+  if (code === "too_large" || code === "unsupported_type") return "That file can't be used. Try a JPEG or PNG photo.";
+  if (code === "quota_or_state") return "Photo storage is full. Remove some photos, then try again.";
+  if (code === "rate_limited") return "Too many uploads at once. Wait a moment and try again.";
+  if (code === "upstream_auth") return "Your session expired. Reload the page and try again.";
+  return "The photo didn't upload. Try again.";
+}
+async function addPhotos(specId, files) {
+  if (!S.assets || !files.length) return;
+  const v0 = ownerOf(specId); if (!v0) return;
+  const room = MAX_PHOTOS - ((v0.specs.find((s) => s.id === specId).photos || []).length);
+  const pick = files.slice(0, Math.max(0, room));
+  S.photoErr[specId] = room <= 0 ? `Up to ${MAX_PHOTOS} photos per bolt. Remove one to add another.` : null;
+  if (!pick.length) { render(); return; }
+  S.uploading[specId] = pick.length; render();
+  const ids = [];
+  for (const f of pick) {
+    try { const b = await shrink(f); ids.push((await S.assets.upload(b, { type: "image/jpeg" })).id); }
+    catch (e) { S.photoErr[specId] = photoErrText(e); }
+  }
+  delete S.uploading[specId];
+  const v = ownerOf(specId);
+  if (ids.length && v) await upsert({ ...v, specs: v.specs.map((s) => (s.id === specId ? { ...s, photos: [...(s.photos || []), ...ids] } : s)) });
+  render();
+}
+function dropAssets(ids) { if (!S.assets) return; for (const id of ids || []) S.assets.delete(id).catch(() => {}); }
+
+/* ---------- lookups ---------- */
+function vehicleBlock(v) {
+  return [`Year: ${v.year}`, `Make: ${v.make}`, `Model: ${v.model}`, v.trim && `Trim: ${v.trim}`, v.engine && `Engine: ${v.engine}`, v.drive && `Drive: ${v.drive}`, "Market: United States / Canada"].filter(Boolean).join("\n");
+}
+const ITEM_RULES = `Rules:
+- US/Canada market vehicle only. Use factory service manual values for this exact vehicle.
+- Give torque in newton-metres as a number in "nm". If the spec is torque plus angle, put the first stage in "nm" and the angle in "angle" (for example "+90°").
+- If you don't know a value, set "nm" to null and say so in "notes". Never guess.
+- "page": the factory service manual section and page if you know it (for example "BR-37"), else null.
+- Give front and rear as separate items when they differ.
+- Mention single-use / torque-to-yield bolts, thread locker and sequences in "notes".
+- "fastener": thread size and tool if known.
+- "job" is one of: wheels, oil, ignition, suspension, drivetrain, other.
+- "atlas" is one of these ids when the item matches, otherwise null: ${ATLAS_IDS.join(", ")}.`;
+function fullPrompt(v) {
+  const list = ATLAS_IDS.map((id) => `${id}: ${ATLAS[id].name} (${ATLAS[id].job})`).join("\n");
+  return `You are a master automotive technician. Give the factory torque specifications and service parts for this vehicle:
+${vehicleBlock(v)}
+
+${ITEM_RULES}
+
+Cover each of these items where the vehicle has it:
+${list}
+
+Parts and fluids (one value each, exactly what the US/Canada owner's or service manual specifies, no alternatives): ${PART_KEYS.join(", ")}.
+Use OEM part numbers for filters, spark plugs and other parts.
+
+Reply with only JSON:
+{"torque": [{"atlas": "lug", "job": "wheels", "name": "Wheel lug nuts", "nm": 108, "angle": null, "fastener": "M12×1.25, 21 mm", "notes": "Star pattern.", "page": "WT-8"}],
+ "parts": [{"key": "engineOil", "value": "SAE 5W-30, API SN"}, {"key": "oilFilter", "value": "Nissan 15208-65F0E"}]}`;
+}
+function askPrompt(v, q) {
+  return `You are a master automotive technician. For this vehicle:
+${vehicleBlock(v)}
+
+Give the factory torque specification(s) for: "${q}"
+
+${ITEM_RULES}
+
+Reply with only JSON: {"torque": [{"atlas": null, "job": "suspension", "name": "Rear subframe bolts", "nm": 120, "angle": null, "fastener": "M14×1.5, 18 mm", "notes": "Torque-to-yield, replace.", "page": null}]}`;
+}
+const JOB_IDS = JOBS.map((j) => j.id);
+function cleanItem(t) {
+  if (!t || typeof t !== "object") return null;
+  const atlas = ATLAS[t.atlas] ? t.atlas : null;
+  const job = JOB_IDS.includes(t.job) ? t.job : atlas ? ATLAS[atlas].job : "other";
+  const nm = typeof t.nm === "number" && isFinite(t.nm) && t.nm > 0 && t.nm < 2000 ? t.nm : null;
+  return { id: uid(), atlas, job, name: String(t.name || (atlas && ATLAS[atlas].name) || "Bolt").slice(0, 120), nm,
+    angle: t.angle ? String(t.angle).slice(0, 40) : null, fastener: t.fastener ? String(t.fastener).slice(0, 120) : null,
+    notes: t.notes ? String(t.notes).slice(0, 600) : null, page: null, verified: false, hintPage: t.page ? String(t.page).slice(0, 30) : null };
+}
+function sampleErrorText(e) {
+  const code = e && e.code;
+  if (["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(code)) return "Lookups aren't available here. You can still enter specs from your manual.";
+  if (code === "rate_limited") return "Too many lookups right now. Wait a few minutes and try again.";
+  if (code === "session_expired") return "Your session expired. Sign in again, then retry.";
+  if (code === "invalid_json") return "The lookup came back garbled. Try again.";
+  if (code === "cancelled") return "Lookup stopped.";
+  return "The lookup didn't finish. Try again.";
+}
+async function runLookup(v) {
+  const sample = await getSample();
+  if (!sample) { S.notice[v.id] = { err: true, text: "Lookups aren't available here. Add specs from your manual with Add a bolt." }; render(); return; }
+  S.busy[v.id] = "Looking up specs for your car. This usually takes 20 to 60 seconds."; S.notice[v.id] = null; render();
+  try {
+    const res = await sample.json(fullPrompt(v), { modelTier: "complex" });
+    const items = Array.isArray(res && res.torque) ? res.torque.map(cleanItem).filter(Boolean) : [];
+    const cur = S.vehicles.find((x) => x.id === v.id) || v;
+    const lib = await readLibrary(cur);
+    const mine = (cur.specs || []).filter((s) => s.verified || s.manual);
+    const mineNames = new Set(mine.map((s) => s.name.toLowerCase()));
+    const shared = (lib?.specs || []).filter((s) => !mineNames.has(String(s.name).toLowerCase())).map((s) => ({ ...s, id: uid(), verified: true, shared: true }));
+    const kept = [...mine, ...shared];
+    const keptKeys = new Set(kept.map((s) => (s.atlas || "") + "|" + s.name.toLowerCase()));
+    const keptAtlas = new Set(kept.filter((s) => s.verified && s.atlas).map((s) => s.atlas + "|" + (/rear/i.test(s.name) ? "r" : /front/i.test(s.name) ? "f" : "")));
+    const fresh = items.filter((s) => !keptKeys.has((s.atlas || "") + "|" + s.name.toLowerCase()) && !(s.atlas && keptAtlas.has(s.atlas + "|" + (/rear/i.test(s.name) ? "r" : /front/i.test(s.name) ? "f" : ""))));
+    const parts = { ...(cur.parts || {}) };
+    for (const p of Array.isArray(res && res.parts) ? res.parts : []) {
+      if (!p || !PART_KEYS.includes(p.key) || !p.value) continue;
+      if (parts[p.key] && (parts[p.key].verified || parts[p.key].manual)) continue;
+      parts[p.key] = { value: String(p.value).slice(0, 300), verified: false };
+    }
+    for (const [k, p] of Object.entries(lib?.parts || {})) if (PART_KEYS.includes(k) && !(parts[k] && (parts[k].verified || parts[k].manual))) parts[k] = { value: p.value, page: p.page, verified: true, shared: true };
+    await upsert({ ...cur, specs: [...kept, ...fresh], parts, lookedUpAt: new Date().toISOString() });
+    S.notice[v.id] = { text: (shared.length ? `${shared.length} verified specs came from other owners of this car. ` : "") + `Found ${fresh.length} more spec${fresh.length === 1 ? "" : "s"}, marked Not verified until you check them against the factory manual.` };
+  } catch (e) { S.notice[v.id] = { err: true, text: sampleErrorText(e) }; }
+  finally { delete S.busy[v.id]; render(); }
+}
+async function runAsk(v, q) {
+  const sample = await getSample();
+  if (!sample) { S.notice[v.id] = { err: true, text: "Lookups aren't available here. Use Add a bolt to enter it from your manual." }; render(); return; }
+  S.busy[v.id] = `Looking up "${q}"…`; S.notice[v.id] = null; render();
+  try {
+    const res = await sample.json(askPrompt(v, q), { modelTier: "complex" });
+    const items = Array.isArray(res && res.torque) ? res.torque.map(cleanItem).filter(Boolean) : [];
+    if (!items.length) { S.notice[v.id] = { err: true, text: `No spec found for "${q}". Try naming the part differently.` }; return; }
+    const cur = S.vehicles.find((x) => x.id === v.id) || v;
+    await upsert({ ...cur, specs: [...(cur.specs || []), ...items] });
+    S.job = items[0].job; S.selected = items[0].id; S.view = "specs";
+    S.notice[v.id] = { text: `Added ${items.length} item${items.length > 1 ? "s" : ""} to ${JOBS.find((j) => j.id === items[0].job).name}. Not verified yet.` };
+  } catch (e) { S.notice[v.id] = { err: true, text: sampleErrorText(e) }; }
+  finally { delete S.busy[v.id]; render(); }
+}
+
+/* ---------- diagrams ---------- */
+const hex = (x, y, rr) => { let p = []; for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; p.push((x + rr * Math.cos(a)).toFixed(1) + "," + (y + rr * Math.sin(a)).toFixed(1)); } return `<polygon points="${p.join(" ")}"/>`; };
+const pol = (cx, cy, rad, deg) => [cx + rad * Math.cos(deg * Math.PI / 180), cy + rad * Math.sin(deg * Math.PI / 180)];
+function arcBand(cx, cy, r1, r2, a1, a2) {
+  const [x1, y1] = pol(cx, cy, r2, a1), [x2, y2] = pol(cx, cy, r2, a2), [x3, y3] = pol(cx, cy, r1, a2), [x4, y4] = pol(cx, cy, r1, a1);
+  return `M${x1},${y1} A${r2},${r2} 0 0 1 ${x2},${y2} L${x3},${y3} A${r1},${r1} 0 0 0 ${x4},${y4} Z`;
+}
+
+const sc = (c, o) => `style="stop-color:var(--${c})${o != null ? ";stop-opacity:" + o : ""}"`;
+const grad = (id, dir, stops) => {
+  const [x2, y2] = dir === "h" ? [1, 0] : dir === "d" ? [1, 1] : [0, 1];
+  return `<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}">${stops.map(([o, c, a]) => `<stop offset="${o}" ${sc(c, a)}/>`).join("")}</linearGradient>`;
+};
+function defs() {
+  return `<defs>
+    ${grad("gChrome", "d", [[0, "hi"], [0.45, "metal"], [1, "metal-3"]])}
+    ${grad("gCyl", "h", [[0, "shade"], [0.28, "hi"], [0.5, "metal"], [0.85, "metal-3"], [1, "shade"]])}
+    ${grad("gCast", "v", [[0, "metal"], [1, "metal-3"]])}
+    ${grad("gAlu", "v", [[0, "hi"], [0.35, "metal"], [1, "metal-2"]])}
+    ${grad("gCaliper", "d", [[0, "caliper-hi"], [0.45, "caliper"], [1, "caliper-dk"]])}
+    ${grad("gRubber", "d", [[0, "rubber-hi"], [0.55, "rubber"], [1, "rubber"]])}
+    ${grad("gRubberCyl", "h", [[0, "rubber"], [0.3, "rubber-hi"], [0.6, "rubber"], [1, "rubber"]])}
+    ${grad("gFilter", "h", [[0, "filter-dk"], [0.3, "filter"], [0.42, "hi", 0.9], [0.55, "filter"], [1, "filter-dk"]])}
+    ${grad("gCeramic", "h", [[0, "ceramic-sh"], [0.35, "ceramic"], [0.7, "ceramic"], [1, "ceramic-sh"]])}
+    ${grad("gIron", "d", [[0, "iron-hi"], [1, "iron"]])}
+    <radialGradient id="gRotor" cx=".42" cy=".38" r=".7"><stop offset="0" ${sc("hi")}/><stop offset=".55" ${sc("metal")}/><stop offset="1" ${sc("metal-3")}/></radialGradient>
+    <radialGradient id="gHat" cx=".38" cy=".34" r=".75"><stop offset="0" ${sc("iron-hi")}/><stop offset="1" ${sc("iron")}/></radialGradient>
+    <radialGradient id="gBoot" cx=".35" cy=".3" r=".8"><stop offset="0" ${sc("rubber-hi")}/><stop offset="1" ${sc("rubber")}/></radialGradient>
+    <filter id="fSh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1.5" dy="2.5" stdDeviation="2" flood-color="#000" flood-opacity=".35"/></filter>
+  </defs>`;
+}
+const nut = (x, y, rr, extra = "") => `<g filter="url(#fSh)">${hex(x, y, rr).replace("<polygon", `<polygon fill="url(#gChrome)" stroke="var(--shade)" stroke-width="1" ${extra}`)}<circle cx="${x}" cy="${y}" r="${(rr * 0.5).toFixed(1)}" fill="url(#gCyl)" stroke="var(--shade)" stroke-width=".6"/></g>`;
+const boot = (x, y, rr) => `<g filter="url(#fSh)"><circle cx="${x}" cy="${y}" r="${rr}" fill="url(#gBoot)"/>${[0.78, 0.56].map((k) => `<circle cx="${x}" cy="${y}" r="${(rr * k).toFixed(1)}" fill="none" stroke="var(--rubber-hi)" stroke-width="1"/>`).join("")}</g>`;
+const tube = (d, w, base = "rubber", hiC = "rubber-hi") => `<path d="${d}" fill="none" stroke="var(--${base})" stroke-width="${w}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="var(--${hiC})" stroke-width="${Math.max(1, w / 4)}" stroke-linecap="round" transform="translate(0,-${(w / 4).toFixed(1)})"/>`;
+const label = (x, y, t) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="11" fill="var(--ink-2)" font-family="var(--f-body)">${t}</text>`;
+
+function drawWheels() {
+  const c = [180, 170];
+  const lugs = [-90, -18, 54, 126, 198].map((a) => pol(...c, 42, a));
+  const pins = [-24, 24].map((a) => pol(...c, 118, a));
+  const brk = [-46, 46].map((a) => pol(...c, 132, a));
+  let rings = "", vanes = "", ribs = "", holes = "";
+  for (let rr = 72; rr <= 118; rr += 2.2) rings += `<circle cx="180" cy="170" r="${rr.toFixed(1)}"/>`;
+  for (let a = 0; a < 360; a += 6) { const [x1, y1] = pol(...c, 119.5, a), [x2, y2] = pol(...c, 124.5, a); vanes += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
+  for (let a = 100; a < 260; a += 20) { const [x1, y1] = pol(...c, 128, a), [x2, y2] = pol(...c, 138, a); ribs += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
+  for (const a of [-54, 18, 90, 162, 234]) { const [x, y] = pol(...c, 30, a); holes += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`; }
+  return `
+  <path d="M150,298 L418,304 L418,334 L166,330 Z" fill="url(#gCast)" stroke="var(--shade)" stroke-width="1" filter="url(#fSh)"/>
+  <path d="M190,306 L410,310" stroke="var(--hi)" stroke-opacity=".5" stroke-width="1.5"/>
+  ${tube("M0,300 L50,289", 9, "shade", "metal")}
+  <path d="M128,244 Q96,262 64,284" fill="none" stroke="url(#gCast)" stroke-width="18" stroke-linecap="round"/>
+  ${boot(62, 286, 13)}${nut(62, 286, 6.5)}
+  ${boot(180, 312, 17)}${nut(180, 312, 8)}
+  <circle cx="180" cy="170" r="140" fill="var(--metal-3)" stroke="var(--shade)" stroke-width="1"/>
+  <g stroke="var(--shade)" stroke-opacity=".45" stroke-width="2">${ribs}</g>
+  <path d="${arcBand(...c, 108, 153, -57, 57)}" fill="url(#gIron)" stroke="var(--shade)" stroke-width="1" filter="url(#fSh)"/>
+  <circle cx="180" cy="170" r="125" fill="url(#gRotor)" stroke="var(--shade)" stroke-width="1.5" filter="url(#fSh)"/>
+  <g fill="none" stroke="var(--shade)" stroke-opacity=".10" stroke-width=".8">${rings}</g>
+  <g stroke="var(--shade)" stroke-width="2.2" stroke-opacity=".75">${vanes}</g>
+  <circle cx="180" cy="170" r="119" fill="none" stroke="var(--shade)" stroke-opacity=".35"/>
+  <circle cx="180" cy="170" r="69" fill="none" stroke="var(--shade)" stroke-width="3" stroke-opacity=".5"/>
+  <circle cx="180" cy="170" r="66" fill="url(#gHat)" stroke="var(--shade)" stroke-width="1"/>
+  <circle cx="180" cy="170" r="63" fill="none" stroke="var(--iron-hi)" stroke-width="1.5" stroke-opacity=".8"/>
+  <circle cx="180" cy="170" r="28" fill="url(#gChrome)" stroke="var(--shade)" stroke-width="1"/>
+  <g fill="var(--shade)" opacity=".55">${holes}</g>
+  ${lugs.map(([x, y]) => nut(x, y, 10)).join("")}
+  ${nut(180, 170, 16)}
+  <rect x="178" y="152" width="4" height="7" fill="var(--shade)"/>
+  ${brk.map(([x, y]) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="12.5" fill="url(#gCast)" stroke="var(--shade)"/>` + nut(x, y, 9)).join("")}
+  <path d="${arcBand(...c, 95, 143, -38, 38)}" fill="url(#gCaliper)" stroke="var(--caliper-dk)" stroke-width="1.2" filter="url(#fSh)"/>
+  <path d="${arcBand(...c, 104, 134, -15, 15)}" fill="var(--rubber)" opacity=".55"/>
+  <path d="${arcBand(...c, 108, 130, -12, 12)}" fill="url(#gIron)"/>
+  <path d="M${pol(...c, 140, -33).join(",")} A140,140 0 0 1 ${pol(...c, 140, 33).join(",")}" fill="none" stroke="var(--caliper-hi)" stroke-width="2" stroke-opacity=".7"/>
+  <path d="M${pol(...c, 98, -34).join(",")} A98,98 0 0 1 ${pol(...c, 98, 34).join(",")}" fill="none" stroke="var(--caliper-dk)" stroke-width="2" stroke-opacity=".6"/>
+  ${pins.map(([x, y]) => boot(x.toFixed(1), y.toFixed(1), 9.5) + nut(x, y, 5.5)).join("")}
+  <rect x="313" y="141" width="12" height="14" rx="2" fill="url(#gChrome)" stroke="var(--shade)"/>
+  <circle cx="319" cy="141" r="5" fill="url(#gBoot)"/>
+  ${tube("M326,194 C358,196 382,230 418,236", 8)}
+  <rect x="368" y="214" width="8" height="12" rx="1.5" fill="url(#gChrome)" stroke="var(--shade)" transform="rotate(35 372 220)"/>
+  <ellipse cx="318" cy="194" rx="11" ry="9" fill="url(#gChrome)" stroke="var(--shade)" filter="url(#fSh)"/>
+  <circle cx="318" cy="194" r="9.5" fill="none" stroke="var(--brass)" stroke-width="2"/>
+  ${nut(318, 194, 6)}
+  ${label(180, 22, "Front wheel corner, wheel removed")}`;
+}
+
+function drawOil() {
+  const bolts = [110, 150, 190, 230, 270, 310];
+  let blockRibs = "", coverRibs = "", panFins = "";
+  for (let x = 112; x <= 312; x += 20) blockRibs += `<line x1="${x}" y1="130" x2="${x}" y2="230"/>`;
+  for (let x = 128; x <= 296; x += 12) coverRibs += `<line x1="${x}" y1="44" x2="${x}" y2="72"/>`;
+  for (let x = 128; x <= 296; x += 14) panFins += `<line x1="${x}" y1="246" x2="${x + (x - 210) * 0.08}" y2="294"/>`;
+  return `
+  <path d="M90,126 L330,126 L330,234 L90,234 Z" fill="url(#gIron)" stroke="var(--shade)" stroke-width="1.2"/>
+  <g stroke="var(--shade)" stroke-opacity=".35" stroke-width="3">${blockRibs}</g>
+  ${[150, 230].map((x) => `<circle cx="${x}" cy="196" r="9" fill="url(#gChrome)" stroke="var(--shade)"/><circle cx="${x}" cy="196" r="5" fill="none" stroke="var(--shade)" stroke-opacity=".5"/>`).join("")}
+  <rect x="100" y="76" width="220" height="50" fill="url(#gAlu)" stroke="var(--shade)" stroke-width="1.2"/>
+  <line x1="100" y1="101" x2="320" y2="101" stroke="var(--shade)" stroke-opacity=".3"/>
+  ${[118, 162, 206, 250, 294].map((x) => `<circle cx="${x}" cy="88" r="3.2" fill="url(#gChrome)" stroke="var(--shade)" stroke-width=".6"/>`).join("")}
+  <rect x="112" y="40" width="196" height="36" rx="10" fill="url(#gAlu)" stroke="var(--shade)" stroke-width="1.2" filter="url(#fSh)"/>
+  <g stroke="var(--shade)" stroke-opacity=".25" stroke-width="2">${coverRibs}</g>
+  <g filter="url(#fSh)"><circle cx="170" cy="58" r="13" fill="url(#gRubber)"/>
+    ${Array.from({ length: 16 }, (_, i) => { const [x1, y1] = pol(170, 58, 10.5, i * 22.5), [x2, y2] = pol(170, 58, 13, i * 22.5); return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--rubber-hi)"/>`; }).join("")}
+    <path d="M164,61 h9 l3,-4 h-3 l-2,-2 h-5 z" fill="var(--hi)" opacity=".8"/></g>
+  <rect x="316" y="66" width="28" height="42" rx="3" fill="url(#gCyl)" stroke="var(--shade)" filter="url(#fSh)"/>
+  ${[80, 90, 100].map((y) => `<line x1="317" y1="${y}" x2="343" y2="${y}" stroke="var(--shade)" stroke-opacity=".3"/>`).join("")}
+  <g filter="url(#fSh)">${hex(330, 64, 11).replace("<polygon", `<polygon fill="url(#gRubber)" stroke="var(--rubber)"`)}<circle cx="330" cy="64" r="4" fill="var(--rubber-hi)"/></g>
+  <rect x="80" y="172" width="14" height="40" fill="url(#gCast)" stroke="var(--shade)"/>
+  <g filter="url(#fSh)">
+    <rect x="38" y="164" width="46" height="58" rx="4" fill="url(#gFilter)"/>
+    <path d="M38,214 Q61,232 84,214 L84,218 Q61,236 38,218 Z" fill="var(--filter-dk)"/>
+    <rect x="36" y="160" width="50" height="7" rx="2" fill="url(#gCyl)" stroke="var(--shade)" stroke-width=".6"/>
+    <rect x="42" y="182" width="38" height="18" rx="2" fill="var(--hi)" opacity=".85"/>
+    <line x1="46" y1="188" x2="72" y2="188" stroke="var(--shade)" stroke-width="2"/><line x1="46" y1="194" x2="64" y2="194" stroke="var(--shade)" stroke-width="1.5" stroke-opacity=".6"/>
+    ${[170, 174, 178].map((y) => `<line x1="40" y1="${y}" x2="82" y2="${y}" stroke="var(--filter-dk)" stroke-opacity=".6"/>`).join("")}
+  </g>
+  <path d="M90,236 L330,236 L312,300 L108,300 Z" fill="url(#gAlu)" stroke="var(--shade)" stroke-width="1.2" filter="url(#fSh)"/>
+  <g stroke="var(--shade)" stroke-opacity=".22" stroke-width="2.5">${panFins}</g>
+  <rect x="86" y="232" width="248" height="9" rx="1.5" fill="url(#gCast)" stroke="var(--shade)"/>
+  ${bolts.map((x) => hex(x, 238, 4).replace("<polygon", `<polygon fill="url(#gChrome)" stroke="var(--shade)" stroke-width=".6"`)).join("")}
+  <rect x="289" y="300" width="18" height="2.5" fill="var(--brass)"/>
+  <g filter="url(#fSh)"><rect x="290" y="302.5" width="16" height="10" rx="1" fill="url(#gCyl)" stroke="var(--shade)" stroke-width=".8"/>
+    <line x1="295" y1="303" x2="295" y2="312" stroke="var(--shade)" stroke-opacity=".5"/><line x1="301" y1="303" x2="301" y2="312" stroke="var(--shade)" stroke-opacity=".5"/></g>
+  <path d="M298,316 q-4,9 0,15 q4,-6 0,-15" fill="var(--rubber)" opacity=".6"/>
+  ${label(210, 160, "Engine, side view")}`;
+}
+
+function drawIgnition() {
+  const xs = [80, 135, 190, 245];
+  const edge = [[40, 76], [110, 72], [180, 72], [250, 72], [276, 140], [276, 230], [200, 268], [110, 268], [40, 230], [40, 140]];
+  let ribs = "";
+  for (let y = 100; y <= 244; y += 9) ribs += `<line x1="52" y1="${y}" x2="266" y2="${y}"/>`;
+  const threads = Array.from({ length: 7 }, (_, i) => `<line x1="340" y1="${200 + i * 6}" x2="364" y2="${204 + i * 6}"/>`).join("");
+  const insRibs = [96, 108, 120, 132, 144].map((y) => `<path d="M${341 - (y - 86) * 0.06},${y} h${22 + (y - 86) * 0.12}" stroke="var(--ceramic-sh)" stroke-width="2"/>`).join("");
+  return `
+  <rect x="28" y="62" width="262" height="218" rx="22" fill="url(#gAlu)" stroke="var(--shade)" stroke-width="1.2" filter="url(#fSh)"/>
+  <rect x="44" y="92" width="230" height="160" rx="14" fill="url(#gCast)" stroke="var(--shade)" stroke-opacity=".6"/>
+  <g stroke="var(--shade)" stroke-opacity=".12" stroke-width="2">${ribs}</g>
+  ${edge.map(([x, y]) => hex(x, y, 5.5).replace("<polygon", `<polygon fill="url(#gChrome)" stroke="var(--shade)" stroke-width=".7"`)).join("")}
+  ${tube("M60,228 L262,228", 9)}
+  ${xs.map((x) => `<g filter="url(#fSh)">
+      <path d="M${x - 8},132 L${x + 8},132 L${x + 14},148 L${x - 14},148 Z" fill="url(#gRubber)"/>
+      <circle cx="${x}" cy="132" r="9" fill="url(#gRubber)"/>
+      <rect x="${x - 18}" y="144" width="36" height="74" rx="8" fill="url(#gRubberCyl)"/>
+      <rect x="${x - 13}" y="150" width="26" height="4" rx="2" fill="var(--rubber-hi)"/>
+      <rect x="${x - 10}" y="196" width="20" height="26" rx="3" fill="var(--shade)"/>
+      <rect x="${x - 6}" y="200" width="12" height="4" rx="1" fill="var(--rubber-hi)"/>
+    </g>${hex(x, 132, 4.8).replace("<polygon", `<polygon fill="url(#gChrome)" stroke="var(--shade)" stroke-width=".6"`)}`).join("")}
+  ${label(159, 300, "Valve cover, top view")}
+  <g filter="url(#fSh)">
+    <rect x="347" y="56" width="10" height="8" rx="2" fill="url(#gChrome)" stroke="var(--shade)" stroke-width=".7"/>
+    <rect x="344" y="64" width="16" height="10" rx="1" fill="url(#gChrome)" stroke="var(--shade)" stroke-width=".7"/>
+    <path d="M343,74 h18 l6,84 h-30 z" fill="url(#gCeramic)" stroke="var(--ceramic-sh)"/>
+    ${insRibs}
+    <rect x="334" y="158" width="36" height="34" fill="url(#gChrome)" stroke="var(--shade)"/>
+    <line x1="346" y1="158" x2="346" y2="192" stroke="var(--shade)" stroke-opacity=".45"/><line x1="358" y1="158" x2="358" y2="192" stroke="var(--shade)" stroke-opacity=".45"/>
+    <rect x="336" y="192" width="32" height="5" fill="var(--shade)"/>
+    <rect x="340" y="197" width="24" height="44" fill="url(#gCyl)" stroke="var(--shade)" stroke-width=".8"/>
+    <g stroke="var(--shade)" stroke-opacity=".55">${threads}</g>
+    <rect x="349" y="241" width="6" height="12" fill="var(--ceramic)"/>
+    <line x1="352" y1="241" x2="352" y2="256" stroke="var(--metal-3)" stroke-width="3"/>
+    <path d="M341,241 v20 h11" fill="none" stroke="var(--metal-3)" stroke-width="3.5"/>
+  </g>
+  <line x1="370" y1="256" x2="370" y2="261" stroke="var(--accent)" stroke-width="1.5"/>
+  <line x1="356" y1="256" x2="370" y2="256" stroke="var(--accent)" stroke-width=".8" stroke-dasharray="2 2"/>
+  <line x1="356" y1="261" x2="370" y2="261" stroke="var(--accent)" stroke-width=".8" stroke-dasharray="2 2"/>
+  <text x="375" y="262" font-size="10" fill="var(--ink-2)" font-family="var(--f-mono)">gap</text>
+  ${label(352, 300, "Spark plug")}`;
+}
+const DRAW = { wheels: drawWheels, oil: drawOil, ignition: drawIgnition };
+
+function diagramSVG(job, rows) {
+  const draw = DRAW[job.diagram];
+  const numbered = atlasForJob(job.id).filter((id) => ATLAS[id].part);
+  const selAtlas = rows.find((x) => x.key === S.selected)?.atlas;
+  const marks = numbered.map((id) => {
+    const a = ATLAS[id], n = atlasNum(id), on = id === selAtlas;
+    return `<line class="leader${on ? " on" : ""}" x1="${a.badge[0]}" y1="${a.badge[1]}" x2="${a.part[0]}" y2="${a.part[1]}"/>
+      <circle class="hot${on ? " on" : ""}" cx="${a.part[0]}" cy="${a.part[1]}" r="16"/>
+      <g class="badge-g${on ? " on" : ""}" data-act="pick-atlas" data-atlas="${id}" role="button" tabindex="0" aria-label="${esc(a.name)}">
+        <circle cx="${a.badge[0]}" cy="${a.badge[1]}" r="${on ? 13 : 11}"/><text x="${a.badge[0]}" y="${a.badge[1]}">${n}</text></g>`;
+  }).join("");
+  return `<svg viewBox="0 0 420 345" role="img" aria-label="${esc(job.name)} diagram">${defs()}${draw()}${marks}</svg>`;
+}
+const GLYPH = `<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3"><polygon points="40,10 66,25 66,55 40,70 14,55 14,25"/><circle cx="40" cy="40" r="11"/></svg>`;
+
+/* ---------- specs view ---------- */
+const atlasForJob = (jobId) => ATLAS_IDS.filter((id) => ATLAS[id].job === jobId);
+const atlasNum = (id) => atlasForJob(ATLAS[id].job).filter((x) => ATLAS[x].part).indexOf(id) + 1 || null;
+function rowsFor(v, jobId) {
+  const order = (s) => (s.atlas ? ATLAS_IDS.indexOf(s.atlas) : 999);
+  return (v.specs || []).filter((s) => s.job === jobId).sort((a, b) => order(a) - order(b)).map((s) => ({ key: s.id, atlas: s.atlas, spec: s, name: s.name }));
+}
+const SINGLE_USE = /single[- ]use|torque[- ]to[- ]yield|\bTTY\b|never reuse|replace (the )?(bolt|nut)|use (a )?new (bolt|nut)|staked/i;
+function angleSteps(s) {
+  const deg = parseFloat(String(s.angle).replace(/[^\d.]/g, "")) || 0;
+  const turn = deg === 90 ? "a quarter turn" : deg === 180 ? "a half turn" : deg === 45 ? "an eighth of a turn" : deg === 60 ? "one hex flat" : `${deg}°`;
+  return `<div class="box"><span class="label">Torque + angle</span><ol style="margin:0;padding-left:18px">
+    <li>Tighten to <b class="mono">${torque(s.nm).big}</b> with a torque wrench.</li>
+    <li>Mark the bolt head and the part with a paint pen.</li>
+    <li>Turn a further <b>${esc(s.angle)}</b> (${turn}) in one smooth pull. An angle gauge makes this accurate.</li></ol>
+    ${SINGLE_USE.test(s.notes || "") ? "" : '<p class="muted" style="margin:0;font-size:13px">Torque-plus-angle bolts usually stretch: most makers say replace them. Check your manual.</p>'}</div>`;
+}
+function verPill(x) {
+  return x.verified ? `<span class="pill ver">${ICON_CHECK}Verified${x.page ? " · Manual " + esc(x.page) : ""}${x.shared ? " · shared" : ""}</span>` : `<span class="pill unver">Not verified</span>`;
+}
+function photosHTML(s) {
+  const ph = s.photos || [];
+  const up = S.uploading[s.id], err = S.photoErr[s.id];
+  if (!ph.length && !S.assets) return "";
+  const thumbs = ph.map((id, i) => `<button class="thumb" data-act="open-photo" data-id="${s.id}" data-i="${i}" aria-label="Open photo ${i + 1}"><img src="${blobUrl(id)}" alt="Your photo ${i + 1} of ${esc(s.name)}" loading="lazy"></button>`).join("");
+  const add = !S.assets ? "" : up ? `<span class="thumb add busy"><span class="spin"></span>Uploading</span>`
+    : ph.length < MAX_PHOTOS ? `<label class="thumb add" data-act="noop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Add photo<input type="file" accept="image/*" multiple hidden data-photo="${s.id}" id="ph-${s.id}"></label>` : "";
+  return `<div><p class="k" style="margin:0 0 6px">Your photos</p><div class="photos">${thumbs}${add}</div>
+    ${err ? `<p style="color:var(--bad);font-size:13px;margin:6px 0 0">${esc(err)}</p>` : !ph.length ? `<p class="muted" style="font-size:13px;margin:6px 0 0">Snap this bolt on your car so you know exactly what to look for next time.</p>` : ""}</div>`;
+}
+function rowHTML(row) {
+  const on = row.key === S.selected, s = row.spec;
+  const a = row.atlas ? ATLAS[row.atlas] : null, n = row.atlas ? atlasNum(row.atlas) : null;
+  const num = n ? `<span class="num">${n}</span>` : `<span class="num dot" aria-hidden="true">·</span>`;
+  let tq;
+  if (s.nm) { const t = torque(s.nm); tq = `<div class="big">${t.big}</div><div class="alt">${t.alt}</div>`; }
+  else if (a && a.hand && s.verified) tq = `<div class="alt">${esc(a.hand)}</div>`;
+  else if (s.rule) tq = `<div class="alt">${esc(s.rule)}</div>`;
+  else tq = `<div class="none">No value yet</div>`;
+  const pills = `<div class="pills">${s.angle ? `<span class="pill angle">then ${esc(s.angle)}</span>` : ""}${verPill(s)}${SINGLE_USE.test(s.notes || "") ? `<span class="pill unver">Replace bolt / nut</span>` : ""}${(s.photos || []).length ? `<span class="pill">${s.photos.length} photo${s.photos.length > 1 ? "s" : ""}</span>` : ""}</div>`;
+  let more = "";
+  if (on) {
+    const parts = [];
+    if (s.angle && s.nm) parts.push(angleSteps(s));
+    if (s.notes) parts.push(`<p><span class="k">Notes:</span> ${esc(s.notes)}</p>`);
+    if (!s.verified) parts.push(`<p class="warnbox">Check this against the factory manual${s.hintPage ? ` (try ${esc(s.hintPage)})` : ""}, then tap Mark verified and enter the page.</p>`);
+    if (a) parts.push(`<p><span class="k">What it looks like:</span> ${esc(a.look)}</p>`, `<p><span class="k">Tip:</span> ${esc(a.tip)}</p>`);
+    parts.push(photosHTML(s));
+    if (S.editing !== row.key) parts.push(`<div class="actions">
+      ${!s.verified ? `<button class="btn small primary" data-act="edit" data-id="${s.id}" data-verify="1">Mark verified</button>` : ""}
+      <button class="btn small" data-act="edit" data-id="${s.id}">Edit</button>
+      <button class="btn small danger${S.armedDelete === "s:" + s.id ? " armed" : ""}" data-act="del-spec" data-id="${s.id}">${S.armedDelete === "s:" + s.id ? "Tap again to remove" : "Remove"}</button></div>`);
+    more = `<div class="more">${parts.join("")}</div>`;
+  }
+  const edit = S.editing === row.key ? editHTML(s) : "";
+  return `<div class="row${on ? " on" : ""}" data-act="pick" data-key="${esc(row.key)}" tabindex="0" aria-expanded="${on}">
+    ${num}<div><div class="name">${esc(row.name)}</div>${s.fastener ? `<div class="fast">${esc(s.fastener)}</div>` : ""}</div><div class="tq">${tq}</div>${pills}${more}${edit}</div>`;
+}
+function editHTML(s) {
+  const nmVal = s.nm ? (S.unit === "nm" ? r(s.nm) : r(toFt(s.nm))) : "";
+  const jobOpts = JOBS.map((j) => `<option value="${j.id}"${j.id === s.job ? " selected" : ""}>${esc(j.name)}</option>`).join("");
+  const atlasOpts = `<option value="">None (not on diagram)</option>` + ATLAS_IDS.filter((id) => ATLAS[id].job === s.job).map((id) => `<option value="${id}"${id === s.atlas ? " selected" : ""}>${esc(ATLAS[id].name)}</option>`).join("");
+  const wantVerify = S.editVerify || s.verified;
+  return `<form class="edit" data-form="spec" data-id="${s.id}">
+    <label class="field wide"><span class="label">Name</span><input id="e-name" name="name" required value="${esc(s.name)}"></label>
+    <label class="field"><span class="label">Torque (${S.unit === "nm" ? "N·m" : "ft-lb"})</span><input id="e-nm" name="nm" inputmode="decimal" value="${nmVal}"></label>
+    <label class="field"><span class="label">Then angle</span><input id="e-angle" name="angle" placeholder="+90°" value="${esc(s.angle || "")}"></label>
+    <label class="field"><span class="label">Size / tool</span><input id="e-fast" name="fastener" placeholder="14 mm, T-55" value="${esc(s.fastener || "")}"></label>
+    <label class="field"><span class="label">Job</span><select id="e-job" name="job">${jobOpts}</select></label>
+    <label class="field"><span class="label">Diagram spot</span><select id="e-atlas" name="atlas">${atlasOpts}</select></label>
+    <label class="field wide"><span class="label">Notes</span><textarea id="e-notes" name="notes">${esc(s.notes || "")}</textarea></label>
+    <label class="check wide"><input id="e-ver" type="checkbox" name="verified" ${wantVerify ? "checked" : ""}> I checked this value in the factory service manual</label>
+    <label class="field"><span class="label">Manual page</span><input id="e-page" name="page" placeholder="BR-37" value="${esc(s.page || s.hintPage || "")}"></label>
+    <div class="actions"><button class="btn primary" type="submit">Save</button><button class="btn" type="button" data-act="cancel-edit">Cancel</button></div>
+  </form>`;
+}
+
+function carCard(v) {
+  const specs = v.specs || [], ver = specs.filter((s) => s.verified).length, total = specs.length;
+  const pct = total ? Math.round((ver / total) * 100) : 0;
+  const busy = S.busy[v.id], note = S.notice[v.id];
+  const man = MANUALS[v.make];
+  return `<section class="panel car">
+    <div class="car-top">
+      <div style="min-width:0"><span class="label">Your car</span><h1>${esc(vName(v))}</h1><div class="sub">${esc(vSub(v) || "Trim and engine not set")}${v.vin ? ` · <span class="mono">${esc(v.vin)}</span>` : ""}</div></div>
+      <div class="meter"><div class="txt"><b>${ver} of ${total}</b> torque specs verified from the factory manual</div><div class="bar"><i style="width:${pct}%"></i></div>
+        <div class="actions"><button class="btn small" data-act="toggle-manual">${S.showManual ? "Hide manual links" : "Verify with the manual"}</button></div></div>
+    </div>
+    ${S.showManual ? `<div class="manual">
+      <p>${man ? `Factory service information for ${esc(v.make)}: <a href="${man.url}" target="_blank" rel="noopener">${esc(man.name)}</a>.` : `Use the factory service manual for your ${esc(v.make)} (the maker's technician site, often paid by the day).`} Open a section, find the torque in its drawings or specs table, then tap <b>Mark verified</b> on the bolt and enter the page.</p>
+      ${fsmLinks(v)}
+    </div>` : ""}
+    <form class="ask" data-form="ask">
+      <input id="ask-q" name="q" placeholder="Find a bolt: rear caliper bracket, subframe, alternator…" aria-label="Find a bolt's torque spec" ${busy ? "disabled" : ""}>
+      <button class="btn primary" type="submit" ${busy ? "disabled" : ""}>Find spec</button>
+      <button class="btn" type="button" data-act="add-spec">Add a bolt</button>
+      <button class="btn" type="button" data-act="lookup" ${busy ? "disabled" : ""}>${v.lookedUpAt ? "Look up again" : "Look up specs"}</button>
+    </form>
+    ${busy ? `<div class="msg"><span class="spin"></span>${esc(busy)}</div>` : note ? `<div class="msg${note.err ? " err" : ""}">${esc(note.text)}</div>` : ""}
+  </section>`;
+}
+
+function specsView(v) {
+  const job = JOBS.find((j) => j.id === S.job) || JOBS[0];
+  const rows = rowsFor(v, job.id);
+  if (!rows.some((x) => x.key === S.selected)) S.selected = rows[0]?.key || null;
+  const counts = Object.fromEntries(JOBS.map((j) => [j.id, rowsFor(v, j.id).length]));
+  const tabs = JOBS.filter((j) => j.id !== "other" || counts.other).map((j) => `<button class="tab" role="tab" data-act="job" data-job="${j.id}" aria-selected="${j.id === job.id}">${esc(j.name)}<span class="n">${counts[j.id]}</span></button>`).join("");
+  const selSpec = rows.find((x) => x.key === S.selected)?.spec;
+  const figPhoto = selSpec && (selSpec.photos || []).length
+    ? `<div class="figphoto"><img src="${blobUrl(selSpec.photos[0])}" alt="Your photo of ${esc(selSpec.name)}" data-act="open-photo" data-id="${selSpec.id}" data-i="0"><span class="label">Your photo · ${esc(selSpec.name)}</span></div>` : "";
+  const figure = job.diagram
+    ? `<figure class="panel diagram">${diagramSVG(job, rows)}<figcaption>Illustration. Tap a number to jump to that bolt. Your car's layout may differ.</figcaption>${figPhoto}</figure>`
+    : `<figure class="panel diagram">${figPhoto || `<div class="noshape">${GLYPH}<div>Select a bolt to see what it looks like and where to find it.</div></div>`}</figure>`;
+  const list = rows.length ? rows.map(rowHTML).join("")
+    : `<div class="panel noshape" style="min-height:140px"><div>No ${esc(job.name.toLowerCase())} specs for this car yet.</div><div class="actions"><button class="btn" data-act="add-spec">Add a bolt</button></div></div>`;
+  return `${carCard(v)}<div class="tabs" role="tablist">${tabs}</div><div class="bench">${figure}<div class="specs">${list}</div></div>`;
+}
+
+/* ---------- guides view ---------- */
+function specChips(v, atlasId) {
+  const specs = (v.specs || []).filter((s) => s.atlas === atlasId);
+  if (!specs.length) {
+    const a = ATLAS[atlasId];
+    return a && a.hand ? `<span class="chip">${esc(a.hand)}</span>` : `<span class="chip missing">${esc(a ? a.name : atlasId)}: not in your specs yet</span>`;
+  }
+  return specs.map((s) => `<span class="chip"${s.verified ? "" : ` title="Not verified"`}>${specs.length > 1 ? esc(s.name) + ": " : ""}<span class="mono">${s.nm ? torque(s.nm).big : s.notes ? esc(s.notes.split(".")[0]) : "no value"}</span>${s.angle ? " then " + esc(s.angle) : ""}${s.verified ? "" : " (not verified)"}</span>`).join(" ");
+}
+function partChip(v, key) {
+  const p = (v.parts || {})[key], label = PARTS.find((x) => x.key === key)?.label || key;
+  return p && p.value ? `<span class="chip">${esc(p.value)}${p.verified ? "" : " (not verified)"}</span>` : `<span class="chip missing">${esc(label)}: not set</span>`;
+}
+function fillTokens(v, text) {
+  return esc(text).replace(/\{spec:(\w+)\}/g, (m, id) => specChips(v, id)).replace(/\{part:(\w+)\}/g, (m, key) => partChip(v, key));
+}
+const lvl = (n) => `<span class="lvl" aria-label="Difficulty ${n} of 3">${[1, 2, 3].map((i) => `<i class="${i <= n ? "on" : ""}"></i>`).join("")}</span>`;
+const LEVELS = ["", "Easy", "Moderate", "Advanced"];
+function guideDone(v, g) { try { return JSON.parse(LS.get(`diygnose.g.${v.id}.${g.id}`) || "[]"); } catch (e) { return []; } }
+function guidesView(v) {
+  const g = GUIDES.find((x) => x.id === S.guide);
+  if (!g) {
+    return `<section style="display:grid;gap:4px"><h2 style="font-size:28px">DIY guides for your ${esc(v.model)}</h2><p class="muted" style="margin:0">Step-by-step jobs with your car's own torque specs and parts filled in.</p></section>
+      <div class="ggrid">${GUIDES.map((x) => {
+        const done = guideDone(v, x).length;
+        return `<button class="gcard" data-act="guide" data-id="${x.id}"><span class="label">${esc(x.time)}</span><h3>${esc(x.title)}</h3><p>${esc(x.blurb)}</p>
+          <div class="gmeta"><span class="pill">${lvl(x.level)} ${LEVELS[x.level]}</span>${done ? `<span class="pill">${done}/${x.steps.length} steps done</span>` : ""}</div></button>`;
+      }).join("")}</div>`;
+  }
+  const done = new Set(guideDone(v, g));
+  return `<div><button class="btn small" data-act="guide" data-id="">← All guides</button></div>
+    <section class="panel guide">
+      <div><span class="label">${esc(vName(v))} · ${esc(g.time)} · ${LEVELS[g.level]}</span><h2>${esc(g.title)}</h2></div>
+      <div class="gcols">
+        <div class="box"><span class="label">Parts & fluids for your car</span>${ctReady(v) ? "" : `<p class="muted" style="margin:0;font-size:13px">Shop buttons go to Canadian Tire. Add your car there once so they show only parts that fit (steps in Parts &amp; fluids).</p>`}<ul class="buylist">${g.parts.map((k) => `<li><span>${esc(PARTS.find((p) => p.key === k)?.label || k)}: ${partChip(v, k)}</span>${partBuy(v, k)}</li>`).join("")}</ul></div>
+        <div class="box"><span class="label">Tools</span><ul>${g.tools.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>
+      </div>
+      <ol class="steps">${g.steps.map((st, i) => `<li class="${done.has(i) ? "done" : ""}" data-act="step" data-g="${g.id}" data-i="${i}"><span class="box2">${done.has(i) ? "✓" : i + 1}</span><span>${fillTokens(v, st)}</span></li>`).join("")}</ol>
+      <div class="actions">${MAINT.some((m) => m.id === g.id) ? `<button class="btn small primary" data-act="log-open" data-job="${g.id}">Log this job as done</button>` : ""}<button class="btn small" data-act="reset-guide" data-g="${g.id}">Clear checkmarks</button><button class="btn small" data-act="goto-specs" data-job="${g.job}">See the torque specs</button></div>
+    </section>`;
+}
+
+/* ---------- parts view ---------- */
+function partsView(v) {
+  const cards = PARTS.map((p) => {
+    const cur = (v.parts || {})[p.key];
+    if (S.editingPart === p.key) {
+      return `<form class="part" data-form="part" data-key="${p.key}"><span class="label">${esc(p.label)}</span>
+        <label class="field"><input id="p-${p.key}" name="value" value="${esc(cur?.value || "")}" placeholder="Value from your manual"></label>
+        <label class="check"><input id="pv-${p.key}" type="checkbox" name="verified" ${cur?.verified ? "checked" : ""}> Checked in the factory manual</label>
+        <label class="field"><span class="label">Source / page</span><input id="pp-${p.key}" name="page" value="${esc(cur?.page || "")}" placeholder="MA-12"></label>
+        <div class="foot"><button class="btn small primary" type="submit">Save</button><button class="btn small" type="button" data-act="cancel-part">Cancel</button></div></form>`;
+    }
+    return `<div class="part"><span class="label">${esc(p.label)}</span>
+      <div class="v${cur?.value ? "" : " empty"}">${cur?.value ? esc(cur.value) : "Not set"}</div>
+      ${cur?.value ? "" : `<div class="muted" style="font-size:13px">${esc(p.hint)}</div>`}
+      <div class="foot">${cur?.value ? verPill(cur) : ""}<button class="btn small" data-act="edit-part" data-key="${p.key}">${cur?.value ? "Edit" : "Add"}</button>${partBuy(v, p.key)}</div></div>`;
+  }).join("");
+  return `<section class="panel parts"><div class="parts-head"><div><span class="label">${esc(vName(v))}</span><h2 style="font-size:28px">Parts & fluids</h2></div></div>
+    ${ctSetupNote(v)}<div class="pgrid">${cards}</div></section>`;
+}
+
+/* ---------- welcome ---------- */
+function welcomeView() {
+  return `<section class="panel welcome">
+    <span class="label">Welcome to DIYgnose</span>
+    <h1>Torque specs and DIY guides for your car</h1>
+    <p>Add your car by VIN or by picking the year, make and model. You'll get bolt-by-bolt torque specs, oil and parts, and step-by-step guides for common jobs.</p>
+    <div class="actions"><button class="btn primary big" data-act="add-car">Add your car</button></div>
+    ${S.storage === "local" ? `<p style="font-size:13px">Your garage is saved in this browser.</p>` : ""}
+  </section>`;
+}
+
+/* ---------- sheets ---------- */
+function sheetHTML() {
+  if (S.sheet === "cars") {
+    return `<div class="sheet-bg" data-act="close-sheet"><div class="sheet" role="dialog" aria-modal="true" aria-label="Your cars">
+      <div class="sheet-head"><h2>Your garage</h2><button class="btn small" data-act="close-sheet">Close</button></div>
+      <div class="carlist">${S.vehicles.map((v) => `<button data-act="pick-car" data-id="${v.id}" aria-pressed="${v.id === S.active}"><b>${esc(vName(v))}</b><small>${esc(vSub(v) || "Trim and engine not set")}</small></button>`).join("")}</div>
+      <div class="actions"><button class="btn primary" data-act="add-car">Add a car</button>
+      ${vehicle() ? `<button class="btn danger${S.armedDelete === "v:" + S.active ? " armed" : ""}" data-act="del-car">${S.armedDelete === "v:" + S.active ? "Tap again to delete " + esc(vehicle().model) : "Delete " + esc(vehicle().model)}</button>` : ""}</div>
+    </div></div>`;
+  }
+  if (S.sheet !== "add") return "";
+  const W = S.W;
+  const yr = new Date().getFullYear() + 1;
+  const years = []; for (let y = yr; y >= 1990; y--) years.push(y);
+  const makes = MAKES;
+  const models = W.modelList || [];
+  const sel = (id, name, list, val, ph, extra = "") => `<select id="${id}" name="${name}" ${extra}><option value="">${ph}</option>${list.map((x) => `<option${String(x) === String(val) ? " selected" : ""}>${esc(x)}</option>`).join("")}${val && !list.map(String).includes(String(val)) ? `<option selected>${esc(val)}</option>` : ""}</select>`;
+  const makeField = sel("w-make", "make", makes, W.make, "Choose make", W.year ? "" : "disabled");
+  const modelField = W.modelBusy ? `<select id="w-model" disabled><option>Loading models…</option></select>`
+    : models.length ? sel("w-model", "model", models, W.model, "Choose model", W.make ? "" : "disabled")
+    : `<input id="w-model" name="model" value="${esc(W.model || "")}" placeholder="Model" ${W.make ? "" : "disabled"}>`;
+  const trimField = W.trims && W.trims.length ? sel("w-trim", "trim", W.trims, W.trim, "Choose trim (optional)") : `<input id="w-trim" name="trim" value="${esc(W.trim || "")}" placeholder="e.g. Journey, LE, Sport">`;
+  const engField = W.engines && W.engines.length ? sel("w-engine", "engine", [...W.engines, "Not sure"], W.engine, "Choose engine") : `<input id="w-engine" name="engine" value="${esc(W.engine || "")}" placeholder="Not sure? Leave blank">`;
+  return `<div class="sheet-bg" data-act="close-sheet"><form class="sheet" data-form="add" role="dialog" aria-modal="true" aria-label="Add a car">
+    <div class="sheet-head"><h2>Add a car</h2><button class="btn small" type="button" data-act="close-sheet">Cancel</button></div>
+    <div class="field"><span class="label">VIN (fastest)</span>
+      <div class="ask"><input id="w-vin" class="vin" name="vin" maxlength="17" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="17 characters" value="${esc(W.vin || "")}">
+      <button class="btn" type="button" data-act="decode-vin" ${W.busy ? "disabled" : ""}>Decode</button>
+      <label class="btn" data-act="noop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Scan<input type="file" accept="image/*" capture="environment" hidden id="w-scan" data-scan="1"></label></div>
+      <span class="muted" style="font-size:12.5px">Find it on the driver's door jamb sticker, at the bottom of the windshield, or on your registration.</span></div>
+    ${W.busy ? `<div class="msg"><span class="spin"></span>${esc(W.busy)}</div>` : W.msg ? `<div class="msg${W.err ? " err" : ""}">${esc(W.msg)}</div>` : ""}
+    <div class="or">or choose</div>
+    <div class="grid2">
+      <label class="field"><span class="label">1 · Year</span>${sel("w-year", "year", years, W.year, "Year")}</label>
+      <label class="field"><span class="label">2 · Make</span>${makeField}</label>
+      <label class="field"><span class="label">3 · Model</span>${modelField}</label>
+      <label class="field"><span class="label">4 · Trim</span>${trimField}</label>
+      <label class="field"><span class="label">5 · Engine</span>${engField}</label>
+    </div>
+    ${W.sugBusy ? `<div class="msg"><span class="spin"></span>Finding trims and engines for this model…</div>` : W.sugMsg ? `<div class="msg muted">${esc(W.sugMsg)}</div>` : ""}
+    <p class="muted" style="margin:0;font-size:13px">US and Canada market vehicles. Not sure about the engine? Leave it and the lookup will use the most common one; you can change it later.</p>
+    <div class="actions"><button class="btn primary big" type="submit">Add car and look up specs</button></div>
+  </form></div>`;
+}
+
+function renderToast() {
+  const box = $("#toast"), v = vehicle();
+  if (!S.buyHint || !v || ctReady(v)) { box.innerHTML = ""; return; }
+  box.innerHTML = `<div class="toast" role="status"><div style="min-width:0"><b>First time on Canadian Tire?</b><p>Tap <b>Add Vehicle</b> at the top of their page and choose this car. Canadian Tire then shows only parts that fit, every time.</p>
+    <div class="fit"><span class="mono">${esc(v.year)} · ${esc(String(v.make).toUpperCase())} · ${esc(v.model)} · Region CAN</span></div>
+    <div class="fit" style="margin-top:8px"><button class="btn small" data-act="ct-done">Done, it's added</button><button class="btn small" data-act="close-toast">Later</button></div></div></div>`;
+}
+
+function renderLightbox() {
+  const box = $("#lb");
+  const vw = S.viewer, v = vw && ownerOf(vw.specId), s = v && v.specs.find((x) => x.id === vw.specId);
+  const ph = (s && s.photos) || [];
+  if (!s || !ph.length) { S.viewer = null; box.innerHTML = ""; return; }
+  const i = Math.min(vw.i, ph.length - 1); vw.i = i;
+  const armed = S.armedDelete === "p:" + ph[i];
+  box.innerHTML = `<div class="lb" role="dialog" aria-modal="true" aria-label="Photo of ${esc(s.name)}">
+    <div class="lb-top"><b>${esc(s.name)}</b><button class="btn" data-act="close-photo" id="lb-close">Close</button></div>
+    <img src="${blobUrl(ph[i])}" alt="Your photo ${i + 1} of ${esc(s.name)}">
+    <div class="lb-bar"><div class="actions"><button class="btn" data-act="step-photo" data-d="-1" ${i === 0 ? "disabled" : ""}>Previous</button>
+      <span class="mono" style="align-self:center">${i + 1} / ${ph.length}</span>
+      <button class="btn" data-act="step-photo" data-d="1" ${i === ph.length - 1 ? "disabled" : ""}>Next</button></div>
+      <button class="btn danger${armed ? " armed" : ""}" data-act="del-photo">${armed ? "Tap again to delete photo" : "Delete photo"}</button></div></div>`;
+}
+
+function render() {
+  if (S.ready && !vehicle() && S.vehicles.length) S.active = S.vehicles[0].id;
+  const v = vehicle();
+  $("#carbtn").innerHTML = v ? `<b>${esc(vName(v))}</b><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8l4 4 4-4"/></svg>` : `<b>${S.ready ? "Add a car" : "Loading…"}</b>`;
+  $("#u-nm").setAttribute("aria-pressed", S.unit === "nm");
+  $("#u-ft").setAttribute("aria-pressed", S.unit === "ft");
+  const views = [["specs", "Torque specs"], ["service", "Service log"], ["guides", "DIY guides"], ["parts", "Parts & fluids"]];
+  $("#views").innerHTML = v ? views.map(([id, label]) => `<button role="tab" data-act="view" data-view="${id}" aria-selected="${S.view === id}">${label}</button>`).join("") : "";
+  $("#main").innerHTML = !S.ready ? `<div class="msg"><span class="spin"></span>Loading your garage…</div>` : !v ? welcomeView() : S.view === "guides" ? guidesView(v) : S.view === "parts" ? partsView(v) : S.view === "service" ? serviceView(v) : specsView(v);
+  $("#sheet").innerHTML = sheetHTML();
+  renderLightbox();
+  renderToast();
+}
+
+/* ---------- service log ---------- */
+// Default intervals are a common starting point; each car's own schedule (MA section) should replace them.
+const MAINT = [
+  { id: "oil", name: "Oil & filter change", km: 8000, months: 12 },
+  { id: "rotation", name: "Tire rotation", km: 10000, months: 12 },
+  { id: "cabin", name: "Cabin air filter", km: 24000, months: 12 },
+  { id: "airfilter", name: "Engine air filter", km: 48000, months: 24 },
+  { id: "bleed", name: "Brake fluid flush", km: 0, months: 36 },
+  { id: "pads", name: "Brake pads", km: 0, months: 0 },
+  { id: "plugs", name: "Spark plugs", km: 160000, months: 0 },
+  { id: "coolant", name: "Coolant", km: 100000, months: 60 },
+  { id: "trans", name: "Transmission fluid", km: 100000, months: 0 },
+  { id: "wipers", name: "Wiper blades", km: 0, months: 12 },
+  { id: "battery", name: "Battery", km: 0, months: 60 },
+];
+const KM_PER_MI = 1.609344;
+const distOut = (km) => (S.dist === "mi" ? `${Math.round(km / KM_PER_MI).toLocaleString()} mi` : `${Math.round(km).toLocaleString()} km`);
+const distIn = (n) => (S.dist === "mi" ? n * KM_PER_MI : n);
+const today = () => new Date().toISOString().slice(0, 10);
+const addMonths = (iso, m) => { const d = new Date(iso + "T12:00:00"); d.setMonth(d.getMonth() + m); return d.toISOString().slice(0, 10); };
+const daysUntil = (iso) => Math.round((new Date(iso + "T12:00:00") - new Date(today() + "T12:00:00")) / 86400000);
+const fmtDate = (iso) => new Date(iso + "T12:00:00").toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+function intervalFor(v, id) { const base = MAINT.find((m) => m.id === id) || { km: 0, months: 0 }; const o = (v.intervals || {})[id]; return { km: o?.km ?? base.km, months: o?.months ?? base.months, custom: !!o }; }
+function dueFor(v, m) {
+  const last = (v.log || []).filter((e) => e.job === m.id).sort((a, b) => (b.date + b.km).localeCompare(a.date + a.km))[0];
+  const iv = intervalFor(v, m.id);
+  if (!last) return { m, iv, last: null, status: "none" };
+  const nextKm = iv.km && last.km != null ? last.km + iv.km : null;
+  const nextDate = iv.months ? addMonths(last.date, iv.months) : null;
+  const leftKm = nextKm != null && v.odometer != null ? nextKm - v.odometer : null;
+  const leftDays = nextDate ? daysUntil(nextDate) : null;
+  let status = "ok";
+  if ((leftKm != null && leftKm < 0) || (leftDays != null && leftDays < 0)) status = "over";
+  else if ((leftKm != null && leftKm < 1000) || (leftDays != null && leftDays < 30)) status = "soon";
+  if (!iv.km && !iv.months) status = "info";
+  return { m, iv, last, nextKm, nextDate, leftKm, leftDays, status };
+}
+const STATUS = { over: ["bad", "Overdue"], soon: ["warnp", "Due soon"], ok: ["ver", "OK"], none: ["", "No record yet"], info: ["", "Check by wear"] };
+function serviceView(v) {
+  const dues = MAINT.map((m) => dueFor(v, m));
+  const rank = { over: 0, soon: 1, ok: 2, info: 3, none: 4 };
+  dues.sort((a, b) => rank[a.status] - rank[b.status]);
+  const urgent = dues.filter((d) => d.status === "over" || d.status === "soon");
+  const card = (d) => {
+    const [cls, label] = STATUS[d.status];
+    const next = [d.nextKm != null ? `at ${distOut(d.nextKm)}` : "", d.nextDate ? `by ${fmtDate(d.nextDate)}` : ""].filter(Boolean).join(" or ");
+    const left = [d.leftKm != null ? `${d.leftKm < 0 ? "over by " : ""}${distOut(Math.abs(d.leftKm))}${d.leftKm < 0 ? "" : " left"}` : "", d.leftDays != null ? `${Math.abs(d.leftDays)} days ${d.leftDays < 0 ? "late" : "left"}` : ""].filter(Boolean).join(" · ");
+    const ivTxt = [d.iv.km ? `every ${distOut(d.iv.km)}` : "", d.iv.months ? `every ${d.iv.months} months` : ""].filter(Boolean).join(" or ") || "no fixed interval";
+    const editing = S.editInterval === d.m.id;
+    return `<div class="due ${d.status}"><div class="due-top"><b>${esc(d.m.name)}</b><span class="pill ${cls}">${label}</span></div>
+      ${d.last ? `<div class="muted" style="font-size:13.5px">Last done ${fmtDate(d.last.date)}${d.last.km != null ? ` at ${distOut(d.last.km)}` : ""}</div>` : ""}
+      ${next ? `<div style="font-size:14px">Next ${next}${left ? `<br><span class="muted">${left}</span>` : ""}</div>` : ""}
+      ${editing ? `<form class="ivform" data-form="interval" data-job="${d.m.id}">
+          <label class="field"><span class="label">Every (${S.dist})</span><input id="iv-km" name="km" inputmode="numeric" value="${d.iv.km ? Math.round(S.dist === "mi" ? d.iv.km / KM_PER_MI : d.iv.km) : ""}" placeholder="none"></label>
+          <label class="field"><span class="label">Or months</span><input id="iv-mo" name="months" inputmode="numeric" value="${d.iv.months || ""}" placeholder="none"></label>
+          <div class="actions"><button class="btn small primary" type="submit">Save</button><button class="btn small" type="button" data-act="iv-cancel">Cancel</button></div></form>`
+        : `<div class="due-foot"><span class="muted" style="font-size:12.5px">${ivTxt}${d.iv.custom ? "" : " (default)"}</span>
+          <span class="actions"><button class="btn small" data-act="iv-edit" data-job="${d.m.id}">Interval</button><button class="btn small primary" data-act="log-open" data-job="${d.m.id}">Log it</button></span></div>`}
+    </div>`;
+  };
+  const hist = (v.log || []).slice().sort((a, b) => (b.date + String(b.km).padStart(9, "0")).localeCompare(a.date + String(a.km).padStart(9, "0")));
+  const jobOpts = MAINT.map((m) => `<option value="${m.id}"${S.logJob === m.id ? " selected" : ""}>${esc(m.name)}</option>`).join("") + `<option value="other"${S.logJob === "other" ? " selected" : ""}>Other job</option>`;
+  return `<section class="panel svc">
+      <div class="svc-head"><div><span class="label">${esc(vName(v))}</span><h2 style="font-size:28px">Service log</h2></div>
+        <div class="seg" role="group" aria-label="Distance units"><button data-act="dist" data-dist="km" aria-pressed="${S.dist === "km"}">km</button><button data-act="dist" data-dist="mi" aria-pressed="${S.dist === "mi"}">mi</button></div></div>
+      <form class="ask" data-form="odo"><label class="field" style="flex:1 1 200px"><span class="label">Current odometer</span>
+        <input id="odo" name="odo" inputmode="numeric" placeholder="${S.dist === "mi" ? "e.g. 64,000" : "e.g. 103,000"}" value="${v.odometer != null ? Math.round(S.dist === "mi" ? v.odometer / KM_PER_MI : v.odometer) : ""}"></label>
+        <button class="btn primary" type="submit" style="align-self:end">Update</button></form>
+      ${v.odometer == null ? `<div class="msg">Enter your odometer reading so DIYgnose can tell you what's due.</div>` : urgent.length ? `<div class="msg err">${urgent.length} job${urgent.length > 1 ? "s" : ""} due: ${urgent.map((d) => esc(d.m.name)).join(", ")}.</div>` : `<div class="msg">Nothing due right now.</div>`}
+      <p class="muted" style="margin:0;font-size:13px">Intervals start from common defaults. Set each one from your owner's manual maintenance schedule (MA section), especially for severe driving like short trips and Canadian winters.</p>
+    </section>
+    ${S.logJob ? `<form class="panel logform" data-form="log"><h3 style="font-size:22px">Log a job</h3>
+      <div class="grid2">
+        <label class="field"><span class="label">Job</span><select id="lg-job" name="job">${jobOpts}</select></label>
+        <label class="field"><span class="label">Date</span><input id="lg-date" name="date" type="date" value="${today()}" max="${today()}"></label>
+        <label class="field"><span class="label">Odometer (${S.dist})</span><input id="lg-km" name="km" inputmode="numeric" value="${v.odometer != null ? Math.round(S.dist === "mi" ? v.odometer / KM_PER_MI : v.odometer) : ""}"></label>
+        <label class="field"><span class="label">Notes</span><input id="lg-notes" name="notes" placeholder="Parts used, cost, shop…"></label>
+      </div>
+      <div class="actions"><button class="btn primary" type="submit">Save to log</button><button class="btn" type="button" data-act="log-cancel">Cancel</button></div></form>` : ""}
+    <div class="duegrid">${dues.map(card).join("")}</div>
+    <section class="panel svc"><div class="svc-head"><h3 style="font-size:22px">History</h3><button class="btn small" data-act="log-open" data-job="oil">Log a job</button></div>
+      ${hist.length ? `<div class="hist">${hist.map((e) => `<div class="hrow"><span class="mono">${fmtDate(e.date)}</span><span><b>${esc(e.job === "other" ? "Other" : (MAINT.find((m) => m.id === e.job) || { name: e.job }).name)}</b>${e.notes ? ` · <span class="muted">${esc(e.notes)}</span>` : ""}</span><span class="mono">${e.km != null ? distOut(e.km) : ""}</span>
+        <button class="btn small danger${S.armedDelete === "l:" + e.id ? " armed" : ""}" data-act="log-del" data-id="${e.id}">${S.armedDelete === "l:" + e.id ? "Tap again" : "Delete"}</button></div>`).join("")}</div>` : `<p class="muted" style="margin:0">No jobs logged yet. Log your last oil change to start the reminders.</p>`}
+    </section>`;
+}
+
+/* ---------- shared verified library ---------- */
+// Verified specs are shared by year, make, model and engine, so the next owner of the same car starts verified.
+function engineToken(e) {
+  const s = String(e || "").toUpperCase();
+  const code = (s.match(/\b(?=[A-Z0-9-]*[A-Z])(?=[A-Z0-9-]*\d)[A-Z0-9-]{4,}\b/g) || []).filter((t) => !/^\d+(\.\d)?L$/.test(t)).sort((a, b) => b.length - a.length)[0];
+  if (code) return code.toLowerCase();
+  const disp = s.match(/(\d\.\d)\s*L/); return disp ? disp[1] + "l" : "any";
+}
+const libKey = (v) => [v.year, v.make, v.model, engineToken(v.engine)].join("_").toLowerCase().replace(/[^a-z0-9_.-]+/g, "-").slice(0, 150);
+async function readLibrary(v) {
+  if (!db) return null;
+  try { const s = await db.collection("library").doc(libKey(v)).get(); return s.exists ? s.data() : null; } catch (e) { return null; }
+}
+async function saveLibrary(v) {
+  if (!db || !v) return;
+  const specs = (v.specs || []).filter((s) => s.verified && s.page && s.nm).map((s) => ({ atlas: s.atlas, job: s.job, name: s.name, nm: s.nm, angle: s.angle || null, fastener: s.fastener || null, notes: s.notes || null, page: s.page }));
+  const parts = Object.fromEntries(Object.entries(v.parts || {}).filter(([, p]) => p && p.verified && p.page && p.value).map(([k, p]) => [k, { value: p.value, page: p.page }]));
+  if (!specs.length && !Object.keys(parts).length) return;
+  const ref = db.collection("library").doc(libKey(v));
+  try {
+    const cur = await ref.get(); const old = cur.exists ? cur.data() : {};
+    const byName = new Map((old.specs || []).map((s) => [s.name.toLowerCase(), s]));
+    for (const s of specs) byName.set(s.name.toLowerCase(), s);
+    await ref.set({ year: String(v.year), make: v.make, model: v.model, engine: v.engine || "", specs: [...byName.values()], parts: { ...(old.parts || {}), ...parts }, updatedAt: new Date().toISOString() });
+  } catch (e) {}
+}
+
+/* ---------- add-car wizard ---------- */
+const MAKES = ["Acura", "Alfa Romeo", "Audi", "BMW", "Buick", "Cadillac", "Chevrolet", "Chrysler", "Dodge", "Fiat", "Ford", "Genesis", "GMC", "Honda", "Hummer", "Hyundai", "Infiniti", "Jaguar", "Jeep", "Kia", "Land Rover", "Lexus", "Lincoln", "Mazda", "Mercedes-Benz", "Mercury", "MINI", "Mitsubishi", "Nissan", "Polestar", "Pontiac", "Porsche", "Ram", "Rivian", "Saab", "Saturn", "Scion", "Subaru", "Suzuki", "Tesla", "Toyota", "Volkswagen", "Volvo"];
+const modelCache = {};
+// Models for a year and make: bundled NHTSA list, then NHTSA live, then the built-in lookup.
+async function getModels(year, make) {
+  const key = year + "|" + make;
+  if (modelCache[key]) return modelCache[key];
+  const data = await loadModels();
+  let list = data[year] && data[year][make];
+  if (!list) {
+    try {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 7000);
+      const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${encodeURIComponent(make)}/modelyear/${year}?format=json`, { signal: ctl.signal });
+      clearTimeout(t);
+      const j = await res.json();
+      list = [...new Set((j.Results || []).map((x) => String(x.Model_Name).trim()).filter((m) => !/chassis|cutaway|stripped|incomplete|motorhome|\bbus\b/i.test(m)))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      if (!list.length) list = null;
+    } catch (e) { list = null; }
+  }
+  if (!list) {
+    const sample = await getSample();
+    if (sample) {
+      try {
+        const res = await sample.json(`List every ${make} passenger car, SUV, minivan and pickup model sold in the United States or Canada for model year ${year}. Reply with only a JSON array of model names as ${make} badges them, for example ["Model A", "Model B"].`, { modelTier: "quick", cache: { gcTime: 86400000 } });
+        if (Array.isArray(res)) list = res.map(String).slice(0, 80);
+      } catch (e) {}
+    }
+  }
+  return (modelCache[key] = list || []);
+}
+async function loadModelList() {
+  const W = S.W; if (!W || !W.year || !W.make) return;
+  const key = W.year + "|" + W.make; W.modelKey = key; W.modelBusy = true; render();
+  const list = await getModels(W.year, W.make);
+  if (S.W !== W || W.modelKey !== key) return;
+  W.modelList = list; W.modelBusy = false; render();
+}
+
+function openAdd() { S.W = { year: "", make: "", model: "", trim: "", engine: "", vin: "", trims: [], engines: [], modelList: [] }; S.sheet = "add"; render(); loadModels(); }
+async function suggestTrims() {
+  const W = S.W; if (!W || !W.year || !W.make || !W.model) return;
+  const sample = await getSample();
+  if (!sample) return;
+  const key = `${W.year}|${W.make}|${W.model}`; W.sugKey = key; W.sugBusy = true; W.sugMsg = null; render();
+  try {
+    const res = await sample.json(`List the trims and engine options sold in the United States and Canada for the ${W.year} ${W.make} ${W.model}.
+Reply with only JSON: {"trims": ["Base", "Journey"], "engines": ["3.7L V6 (VQ37VHR)"]}. Use real US/Canada trim names. Keep engine labels short with the engine code if known.`, { modelTier: "quick", cache: { gcTime: 86400000 } });
+    if (S.W !== W || W.sugKey !== key) return;
+    W.trims = Array.isArray(res?.trims) ? res.trims.map(String).slice(0, 20) : [];
+    W.engines = Array.isArray(res?.engines) ? res.engines.map(String).slice(0, 10) : [];
+    if (W.engines.length === 1 && !W.engine) W.engine = W.engines[0];
+    W.sugMsg = W.trims.length || W.engines.length ? null : "No trim list found. Type them in if you know them.";
+  } catch (e) { W.sugMsg = "Couldn't load trims. Type them in if you know them."; }
+  finally { if (S.W === W) { W.sugBusy = false; render(); } }
+}
+async function applyVin(vin) {
+  const W = S.W; if (!W) return;
+  W.vin = vin; W.msg = null; W.err = false;
+  if (!vinShape(vin)) { W.msg = "A VIN has 17 letters and numbers, without I, O or Q."; W.err = true; render(); return; }
+  const checkOk = vinCheckOk(vin);
+  W.busy = "Decoding your VIN…"; render();
+  try {
+    const d = await decodeVin(vin);
+    if (S.W !== W) return;
+    await loadModels();
+    Object.assign(W, { year: d.year || W.year, make: d.make || W.make, model: d.model || W.model, trim: d.trim || W.trim, engine: d.engine || W.engine, drive: d.drive || "" });
+    W.msg = (d.source === "NHTSA" ? "Decoded with NHTSA's VIN database." : d.source === "lookup" ? "Decoded automatically. Check each field matches your car." : `Model year ${d.year || "unknown"} from the VIN. Pick the rest below.`) + (checkOk ? "" : " The VIN check digit doesn't match: check for a typo.");
+    W.err = !checkOk;
+  } catch (e) { W.msg = "Couldn't decode that VIN. Pick your car below."; W.err = true; }
+  finally { if (S.W === W) { W.busy = null; render(); if (W.year && W.make) loadModelList(); if (W.year && W.make && W.model && !W.trims.length) suggestTrims(); } }
+}
+function createVehicle() {
+  const W = S.W;
+  const v = { id: uid(), createdAt: new Date().toISOString(), year: String(W.year), make: W.make.trim(), model: W.model.trim(),
+    trim: (W.trim || "").trim(), engine: W.engine === "Not sure" ? "" : (W.engine || "").trim(), drive: W.drive || "", vin: W.vin && vinShape(W.vin) ? W.vin : "",
+    specs: [], parts: {}, filters: [] };
+  S.sheet = null; S.W = null; S.active = v.id; S.view = "specs"; S.job = "wheels"; S.selected = null; savePrefs();
+  upsert(v); render(); runLookup(v);
+}
+
+/* ---------- events ---------- */
+function updateSpec(id, patch) { const v = vehicle(); if (!v) return; upsert({ ...v, specs: v.specs.map((s) => (s.id === id ? { ...s, ...patch } : s)) }); }
+function pick(key) { S.selected = key; S.editing = null; S.armedDelete = null; render(); }
+
+document.addEventListener("click", (ev) => {
+  const el = ev.target.closest("[data-act]");
+  if (!el) return;
+  const act = el.dataset.act;
+  if (act === "close-sheet" && el.classList.contains("sheet-bg") && ev.target !== el) return;
+  if (!["del-car", "del-spec", "del-photo", "log-del"].includes(act)) S.armedDelete = null;
+  const v = vehicle();
+  switch (act) {
+    case "noop": break;
+    case "dist": S.dist = el.dataset.dist; savePrefs(); render(); break;
+    case "log-open": S.logJob = el.dataset.job; S.view = "service"; S.guide = null; render(); window.scrollTo(0, 0); $("#lg-km")?.focus(); break;
+    case "log-cancel": S.logJob = null; render(); break;
+    case "iv-edit": S.editInterval = el.dataset.job; render(); $("#iv-km")?.focus(); break;
+    case "iv-cancel": S.editInterval = null; render(); break;
+    case "log-del": {
+      const key = "l:" + el.dataset.id;
+      if (S.armedDelete !== key) { S.armedDelete = key; render(); break; }
+      S.armedDelete = null; upsert({ ...v, log: (v.log || []).filter((e) => e.id !== el.dataset.id) }); render(); break;
+    }
+    case "buy": S.buyHint = true; renderToast(); return;
+    case "close-toast": S.buyHint = false; renderToast(); break;
+    case "ct-done": LS.set("diygnose.ct." + v.id, "1"); S.buyHint = false; render(); break;
+    case "ct-reset": LS.set("diygnose.ct." + v.id, "0"); render(); break;
+    case "unit": S.unit = el.dataset.unit; savePrefs(); render(); break;
+    case "view": S.view = el.dataset.view; S.guide = null; render(); window.scrollTo(0, 0); break;
+    case "open-cars": if (!S.vehicles.length) openAdd(); else { S.sheet = "cars"; render(); } break;
+    case "close-sheet": S.sheet = null; S.W = null; render(); break;
+    case "add-car": openAdd(); setTimeout(() => $("#w-vin")?.focus(), 0); break;
+    case "pick-car": S.active = el.dataset.id; S.sheet = null; S.editing = null; S.editingPart = null; S.guide = null; savePrefs(); render(); break;
+    case "decode-vin": applyVin(cleanVin($("#w-vin")?.value)); break;
+    case "toggle-manual": S.showManual = !S.showManual; render(); break;
+    case "job": S.job = el.dataset.job; S.selected = null; S.editing = null; render(); break;
+    case "pick": if (ev.target.closest("form, button, label, a")) return; pick(el.dataset.key); break;
+    case "pick-atlas": { const row = rowsFor(v, S.job).find((x) => x.atlas === el.dataset.atlas); if (row) pick(row.key); break; }
+    case "edit": S.editing = el.dataset.id; S.editVerify = !!el.dataset.verify; render(); (S.editVerify ? $("#e-page") : $("#e-nm"))?.focus(); break;
+    case "cancel-edit": S.editing = null; render(); break;
+    case "del-spec": {
+      const key = "s:" + el.dataset.id;
+      if (S.armedDelete !== key) { S.armedDelete = key; render(); break; }
+      S.armedDelete = null; const gone = (v.specs.find((s) => s.id === el.dataset.id) || {}).photos;
+      upsert({ ...v, specs: v.specs.filter((s) => s.id !== el.dataset.id) }).then(() => dropAssets(gone)); render(); break;
+    }
+    case "del-car": {
+      const key = "v:" + v.id;
+      if (S.armedDelete !== key) { S.armedDelete = key; render(); break; }
+      S.armedDelete = null; S.vehicles = S.vehicles.filter((x) => x.id !== v.id);
+      store.remove(v.id).then(() => dropAssets((v.specs || []).flatMap((s) => s.photos || []))).catch(() => {});
+      S.active = S.vehicles[0]?.id || null; S.sheet = null; savePrefs(); render(); break;
+    }
+    case "lookup": if (v) runLookup(v); break;
+    case "add-spec": {
+      const s = { id: uid(), atlas: null, job: S.job, name: "New bolt", nm: null, angle: null, fastener: null, notes: null, page: null, verified: false, manual: true };
+      upsert({ ...v, specs: [...(v.specs || []), s] }); S.selected = s.id; S.editing = s.id; S.editVerify = true; render();
+      const n = $("#e-name"); if (n) { n.focus(); n.select(); } break;
+    }
+    case "edit-part": S.editingPart = el.dataset.key; render(); $("#p-" + el.dataset.key)?.focus(); break;
+    case "cancel-part": S.editingPart = null; render(); break;
+    case "guide": S.guide = el.dataset.id || null; render(); window.scrollTo(0, 0); break;
+    case "step": {
+      const g = GUIDES.find((x) => x.id === el.dataset.g), i = +el.dataset.i, done = new Set(guideDone(v, g));
+      done.has(i) ? done.delete(i) : done.add(i); LS.set(`diygnose.g.${v.id}.${g.id}`, JSON.stringify([...done])); render(); break;
+    }
+    case "reset-guide": LS.set(`diygnose.g.${v.id}.${el.dataset.g}`, "[]"); render(); break;
+    case "goto-specs": S.view = "specs"; S.job = el.dataset.job; S.selected = null; render(); window.scrollTo(0, 0); break;
+    case "open-photo": S.viewer = { specId: el.dataset.id, i: Number(el.dataset.i) || 0 }; renderLightbox(); $("#lb-close")?.focus(); break;
+    case "close-photo": S.viewer = null; renderLightbox(); break;
+    case "step-photo": if (S.viewer) { S.viewer.i += Number(el.dataset.d); renderLightbox(); } break;
+    case "del-photo": {
+      const ov = S.viewer && ownerOf(S.viewer.specId); if (!ov) break;
+      const sp = ov.specs.find((x) => x.id === S.viewer.specId), id = sp.photos[S.viewer.i];
+      if (S.armedDelete !== "p:" + id) { S.armedDelete = "p:" + id; renderLightbox(); break; }
+      S.armedDelete = null;
+      upsert({ ...ov, specs: ov.specs.map((x) => (x.id === sp.id ? { ...x, photos: x.photos.filter((p) => p !== id) } : x)) }).then(() => dropAssets([id]));
+      render(); break;
+    }
+  }
+});
+document.addEventListener("keydown", (ev) => {
+  if (S.viewer) {
+    if (ev.key === "Escape") { S.viewer = null; renderLightbox(); }
+    else if (ev.key === "ArrowRight" || ev.key === "ArrowLeft") {
+      const ov = ownerOf(S.viewer.specId), n = (ov?.specs.find((x) => x.id === S.viewer.specId)?.photos || []).length;
+      S.viewer.i = Math.max(0, Math.min(n - 1, S.viewer.i + (ev.key === "ArrowRight" ? 1 : -1))); renderLightbox();
+    }
+    return;
+  }
+  if (ev.key === "Escape" && S.sheet) { S.sheet = null; S.W = null; render(); return; }
+  if ((ev.key === "Enter" || ev.key === " ") && ev.target.matches(".row, .badge-g, .steps li")) { ev.preventDefault(); ev.target.click(); }
+});
+document.addEventListener("change", async (ev) => {
+  const t = ev.target;
+  if (t.dataset.photo) { addPhotos(t.dataset.photo, Array.from(t.files || [])); return; }
+  if (t.dataset.scan) {
+    const f = t.files && t.files[0]; if (!f || !S.W) return;
+    const W = S.W; W.busy = "Reading the VIN from your photo…"; W.msg = null; render();
+    try { const vin = await vinFromPhoto(f); if (S.W !== W) return; W.busy = null; await applyVin(vin); }
+    catch (e) { if (S.W !== W) return; W.busy = null; W.err = true; W.msg = e && e.code === "no_reader" ? "Photo scanning isn't available here. Type the VIN instead." : "Couldn't read a VIN in that photo. Get closer to the barcode or type it in."; render(); }
+    return;
+  }
+  if (S.W && t.closest("form[data-form=add]")) {
+    const W = S.W, name = t.name, val = t.value;
+    if (name === "year") { W.year = val; W.make = ""; W.model = ""; W.trim = ""; W.engine = ""; W.trims = []; W.engines = []; W.modelList = []; }
+    else if (name === "make") { W.make = val; W.model = ""; W.trim = ""; W.engine = ""; W.trims = []; W.engines = []; W.modelList = []; render(); loadModelList(); return; }
+    else if (name === "model") { W.model = val; W.trim = ""; W.engine = ""; W.trims = []; W.engines = []; }
+    else if (name === "trim") W.trim = val;
+    else if (name === "engine") W.engine = val;
+    else if (name === "vin") { W.vin = cleanVin(val); return; }
+    render();
+    if (name === "model" && val) suggestTrims();
+    return;
+  }
+  if (t.id === "e-job") {
+    const sel = $("#e-atlas"); const job = t.value;
+    sel.innerHTML = `<option value="">None (not on diagram)</option>` + ATLAS_IDS.filter((id) => ATLAS[id].job === job).map((id) => `<option value="${id}">${esc(ATLAS[id].name)}</option>`).join("");
+  }
+});
+document.addEventListener("input", (ev) => {
+  if (ev.target.id === "w-vin" && S.W) {
+    const v = cleanVin(ev.target.value); S.W.vin = v;
+    if (v.length === 17 && vinShape(v)) applyVin(v);
+  }
+});
+document.addEventListener("submit", (ev) => {
+  const form = ev.target; ev.preventDefault();
+  const kind = form.dataset.form, v = vehicle();
+  if (kind === "add") {
+    const W = S.W; for (const n of ["year", "make", "model", "trim", "engine"]) { const el = form.elements[n]; if (el && el.value) W[n] = el.value; }
+    if (W.year && W.make && W.model) createVehicle(); else { W.msg = "Enter a VIN, or pick the year, make and model first."; W.err = true; render(); }
+  }
+  if (kind === "odo") {
+    const n = parseFloat(String(new FormData(form).get("odo") || "").replace(/[^\d.]/g, ""));
+    if (isFinite(n) && n >= 0) { upsert({ ...v, odometer: Math.round(distIn(n)) }); render(); }
+  }
+  if (kind === "log") {
+    const f = new FormData(form); const n = parseFloat(String(f.get("km") || "").replace(/[^\d.]/g, ""));
+    const km = isFinite(n) ? Math.round(distIn(n)) : null;
+    const entry = { id: uid(), job: String(f.get("job")), date: String(f.get("date") || today()), km, notes: String(f.get("notes") || "").trim().slice(0, 200) || null };
+    upsert({ ...v, log: [...(v.log || []), entry], odometer: km != null && (v.odometer == null || km > v.odometer) ? km : v.odometer });
+    S.logJob = null; render();
+  }
+  if (kind === "interval") {
+    const f = new FormData(form), job = form.dataset.job;
+    const kmN = parseFloat(String(f.get("km") || "").replace(/[^\d.]/g, "")), mo = parseInt(String(f.get("months") || ""), 10);
+    upsert({ ...v, intervals: { ...(v.intervals || {}), [job]: { km: isFinite(kmN) ? Math.round(distIn(kmN)) : 0, months: isFinite(mo) ? mo : 0 } } });
+    S.editInterval = null; render();
+  }
+  if (kind === "ask") { const q = String(new FormData(form).get("q") || "").trim(); if (q && v) runAsk(v, q.slice(0, 200)); }
+  if (kind === "spec") {
+    const f = new FormData(form);
+    const raw = parseFloat(String(f.get("nm") || "").replace(",", "."));
+    const nm = isFinite(raw) && raw > 0 ? (S.unit === "nm" ? raw : raw / 0.737562) : null;
+    const job = String(f.get("job")); const atlas = String(f.get("atlas") || "");
+    updateSpec(form.dataset.id, {
+      name: String(f.get("name")).trim().slice(0, 120) || "Bolt", nm: nm ? Math.round(nm * 100) / 100 : null,
+      angle: String(f.get("angle") || "").trim() || null, fastener: String(f.get("fastener") || "").trim() || null,
+      notes: String(f.get("notes") || "").trim() || null, job, atlas: ATLAS[atlas] && ATLAS[atlas].job === job ? atlas : null,
+      verified: !!f.get("verified"), page: String(f.get("page") || "").trim().slice(0, 30) || null, manual: true,
+    });
+    S.editing = null; S.job = job; render(); saveLibrary(vehicle());
+  }
+  if (kind === "part") {
+    const f = new FormData(form); const key = form.dataset.key; const value = String(f.get("value") || "").trim().slice(0, 300);
+    const p = { ...(v.parts || {}) };
+    if (value) p[key] = { value, verified: !!f.get("verified"), page: String(f.get("page") || "").trim().slice(0, 40) || null, manual: true }; else delete p[key];
+    S.editingPart = null; upsert({ ...v, parts: p }); render(); saveLibrary(vehicle());
+  }
+});
+
+render();
+initStorage();
+})();
+</script>
+
+<script>
+// Offline support and home-screen install on GitHub Pages.
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>
